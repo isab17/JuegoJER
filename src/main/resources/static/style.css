@@ -1,0 +1,121 @@
+/* Contenedor principal */
+#main-container {
+    height: auto;  /* Usamos toda la altura de la ventana */
+    min-height: 100vh; /* Asegura un mínimo de 100vh */
+    background-image: url('assets/Interfaces montadas/fondo_gatos.png'); /* Imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Header con la imagen del título */
+#header {
+    margin-top: 20px;
+    margin-bottom: 70px;
+    text-align: center;
+}
+
+#title-image {
+    max-width: 100%; /* El tamaño del título será 80% del ancho */
+    height: auto;
+}
+
+/* Contenedor del juego */
+/* Ajustar el contenedor del juego al 100% del contenedor principal */
+/* Ajustar el contenedor del juego al 100% del contenedor principal */
+
+/* Asegura que el formulario esté dentro del contenedor del juego */
+#game-container {
+    position: relative; /* Necesario para posicionar elementos como el formulario */
+    width: 100%;
+    height: 100%;
+    display: flex; /* Alineación flexible */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Este estilo aplica al contenedor donde Phaser dibujará el juego */
+#container {
+    width: 100%;  /* Hacemos que el contenedor ocupe todo el espacio disponible */
+    height: auto; /* Hacemos que el contenedor ocupe el 100% del alto de la ventana */
+    max-width: 1600px; /* Limitar el máximo ancho a 600px */
+    max-height: 800px; /* Limitar el máximo alto a 600px */
+    border-radius: 10px;
+} 
+/* Centra y mejora el diseño del formulario */
+#login-form {
+    position: absolute;
+    text-align: center;
+    border-radius: 15px; /* Esquinas redondeadas */
+    padding: 30px;
+    background-color: rgba(139, 10, 130, 0.9); /* Fondo translúcido */
+    width: 320px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6); /* Sombra suave */
+    z-index: 10; /* Asegura que el formulario esté por encima del canvas */
+    font-family: Arial, sans-serif; /* Fuente más moderna */
+}
+
+/* Estilo para inputs */
+.input-field {
+    display: block;
+    width: 85%;
+    margin: 15px auto;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px; /* Bordes redondeados */
+    border: 2px solid #fff;
+    background-color: #f8f8f8; /* Fondo claro */
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+
+/* Mejora del botón */
+.submit-button {
+    margin-top: 20px auto;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgb(185, 78, 164);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button:hover {
+    background-color: rgb(180, 119, 168);
+    transform: scale(1.05); /* Ligeramente más grande al pasar el mouse */
+}
+
+/* Contenedor de botones de modo */
+.mode-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+/* Estilo individual de cada botón de modo */
+.mode-button {
+    color: rgb(81, 185, 223);
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.mode-button:hover {
+    color: #ccc;
+}
+
+/* Contenedor para los botones de acción */
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}

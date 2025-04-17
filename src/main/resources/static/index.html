@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Gatos</title>
+    
+    <!-- Enlazamos el archivo de estilos CSS -->
+    <link rel="icon" href="assets/inventario/Chocolate.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Contenedor principal de la página -->
+    <div id="main-container">
+        <!-- Header con la imagen del título -->
+        <header id="header">
+            <img src="assets/Interfaces montadas/titulo.png" alt="Juego de Gatos" id="title-image">
+        </header>
+        
+        <!-- Contenedor donde se alojará el juego -->
+        <div id="game-container">
+            <!-- El juego se cargará aquí usando Phaser -->
+            <div id="container"></div>
+        </div>
+    </div>
+<!---
+    <div id="chat-box"></div>
+    <input type="text" id="message-input" placeholder="Type your message..." />
+    <button id="send-btn">Send</button>
+-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Incluimos los scripts de Phaser y las escenas -->
+    <script src="./phaser.js"></script>
+    <!--<script src="./node_modules/phaser/dist/phaser.js"></script>-->
+    <script src="./MenuPrincipal.js"></script>
+    <script src="./chat.js"></script>
+    <script src="./Creditos.js"></script>
+    <script src="./Tutorial1.js"></script>
+    <script src="./Tutorial2.js"></script>
+    <script src="./Tutorial3.js"></script>
+    <script src="./Pausa.js"></script>
+    <script src="./Resultados.js"></script>
+    <script src="./IniciarSesion.js"></script>
+    <script src="./Mapas.js"></script>
+    <script src="./Local_Online.js"></script>
+    <script src="./GameLocal1.js"></script>
+    <script src="./GameLocal2.js"></script>
+    <script src="./init.js"></script>
+    
+</body>
+</html>
