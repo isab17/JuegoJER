@@ -216,11 +216,15 @@ Los peces peligrosos (como las pirañas y los peces globo) desaparecen de la pan
 
 ## 5. Estados e Interfaces
 ### 5.1. Diagrama de Estados
-![Estados](GDD/Diagramas/Estados.jpg)
+![Estados](https://github.com/user-attachments/assets/287067ba-5bb2-450a-85d0-5df5159e049c)
 
 ### 5.2. Pantallas e Interfaces
 Pantalla de inicio con un botón de jugar, tutorial, chat, créditos y otro para salir al escritorio. Además, incluye un indicador de estado de conexión.
 ![Menú Inicio](https://github.com/user-attachments/assets/a7f46d32-f54e-40fe-a49a-0f28eed24164)
+
+Pantalla de selección de juego local / online
+
+<img src="https://github.com/user-attachments/assets/532064f8-88f3-4488-8655-ed6d2500a7b8" alt="Local-Online" width="1200" height="720">
 
 Pantalla de chat con una interfaz y un botón de enviar mensajes. Tiene persistencia y permite ver el nombre del usuario que ha escrito.
 ![Chat](https://github.com/user-attachments/assets/bec528c1-6871-4ab9-824f-85e0427edb5b)
@@ -229,7 +233,7 @@ Pantalla de pausa con opciones para ir a la pantalla de inicio o la pantalla de 
 ![pausa_montada](https://github.com/user-attachments/assets/dc81782e-7b6e-494b-9d7c-f924c6857d0b)
 
 Pantalla de créditos con los autores del juego y un botón de regreso a la pantalla de inicio.
-![Captura de pantalla 2024-11-24 190111](GDD/Pantallas/Créditos.png)
+![Captura de pantalla 2024-11-24 190111](https://github.com/user-attachments/assets/a8f9b407-3e63-40d8-ba8b-d5b88d5d6fa2)
 
 Interfaz de inventario con un hueco para cada almacenar peces.
 
@@ -243,10 +247,10 @@ Pantalla de selección de escenario con 3 posibles opciones desbloqueables con e
 ![Escenarios](https://github.com/user-attachments/assets/91c29fd6-2344-4539-aa83-9f2c8752f722)
 
 Pantalla de inicio de sesión y de registro (Intercambiables) para jugar online en el servidor. Además, de dos pantallas de eliminar usuario y cambio de contraseña, también intercambiables y accesibles.
-![Inicio de Sesión](GDD/Pantallas/InicioSesion.png)
-![Registro](GDD/Pantallas/Registro.png)
-![Cambio de Contraseña](GDD/Pantallas/CambiarContraseña.png)
-![Eliminar Usuario](GDD/Pantallas/EliminarUsuario.png)
+![Inicio de Sesión](https://github.com/user-attachments/assets/96036bb2-5c1d-4d6b-98f3-fcdcabd1d72f)
+![Registro](https://github.com/user-attachments/assets/70550e27-863a-4386-92e1-11449201c087)
+![Cambio de Contraseña](https://github.com/user-attachments/assets/4070b0bb-f360-4587-afad-afc7da3c8ef9)
+![Eliminar Usuario](https://github.com/user-attachments/assets/86ada251-9036-4d05-979e-9b2b2b8b5fdd)
 
 Pantalla de tutorial con los controles del juego y un botón de regreso a la pantalla de inicio.
 ![Tutorial 1](https://github.com/user-attachments/assets/830b0f3e-4f7b-4f57-ad46-1415b995f49a)

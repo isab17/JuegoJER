@@ -546,52 +546,28 @@ isInFishingZone(sprite, zones) {
 }
 
 update(time, delta) {
-    console.log(gatoA.width, gatoA.height);
-    const deltaSegundos = delta / 1000;
-     // MOVIMIENTO DEL GATOA
+     
+    // MOVIMIENTO DEL GATOA
      if(gatoA.canMove==true){
         if (keys.D.isDown) {
-            const nuevaX = gatoA.x + 160 * delta; // Predice nueva posición horizontal
-            console.log('Intentando mover derecha a:', nuevaX, gatoA.y);
-            if (!this.enZonaProhibida(nuevaX, gatoA.y, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityX(160);
                 gatoA.anims.play('caminar_drchA', true);
                 izqA = false;
-                console.log('Movimiento permitido');
-            } else {
-                gatoA.setVelocityX(0); // Bloquear el movimiento
-                console.log('Bloqueado por zona prohibida');
-            }
         } else if (keys.A.isDown) {
-            const nuevaX = gatoA.x - 160 * delta; // Predice nueva posición horizontal
-            if (!this.enZonaProhibida(nuevaX, gatoA.y, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityX(-160);
                 gatoA.anims.play('caminar_izqA', true);
                 izqA = true;
-            } else {
-                gatoA.setVelocityX(0); // Bloquear el movimiento
-            }
         }else{
             gatoA.setVelocityX(0);  // Detener el movimiento horizontal
         }
         if (keys.W.isDown) {
-            const nuevaY = gatoA.y - 160 * delta; // Predice nueva posición horizontal
-            if (!this.enZonaProhibida(nuevaY, gatoA.x, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityY(-160);
                 gatoA.anims.play('espaldasA', true);
                 arribaA = true;
-            } else {
-                gatoA.setVelocityY(0); // Bloquear el movimiento
-            }
         } else if (keys.S.isDown) {
-            const nuevaY = gatoA.y + 160 * delta; // Predice nueva posición horizontal
-            if (!this.enZonaProhibida(nuevaY, gatoA.x, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityY(160);
                 gatoA.anims.play('frenteA', true);
                 arribaA = false;
-            } else {
-                gatoA.setVelocityY(0); // Bloquear el movimiento
-            }
         } else {
             gatoA.setVelocityY(0); 
         }

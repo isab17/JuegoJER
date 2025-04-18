@@ -4,73 +4,95 @@ class ResultScreen extends Phaser.Scene {
     }
 
     preload() {
-        // Cargar fondos para victoria y empate dependiendo del gato
         this.load.image('fondo_victoria_gatoA', 'assets/victoria_derrota_empate/victoria_derrota_1.png');
         this.load.image('fondo_victoria_gatoB', 'assets/victoria_derrota_empate/victoria_derrota_2.png');
-
-        // Fondo de empate
         this.load.image('fondo_empate', 'assets/victoria_derrota_empate/empate.png');
 
-        // Botones
         this.load.image('Boton_continuar_normal', 'assets/Interfaces montadas/continuar/normal.png');
         this.load.image('Boton_continuar_encima', 'assets/Interfaces montadas/continuar/seleccionado.png');
         this.load.image('Boton_continuar_pulsado', 'assets/Interfaces montadas/continuar/pulsado.png');
     }
 
     create() {
-        // Variables globales de puntuación
-        const puntuacionA = this.registry.get('puntuacionA') || 0;
-        const puntuacionB = this.registry.get('puntuacionB') || 0;
+        const puntosA = this.registry.get('puntuacionA') || 0;
+        const puntosB = this.registry.get('puntuacionB') || 0;
+        const esGanador = this.registry.get('esGanador');
+        const esEmpate = this.registry.get('esEmpate');
+        const jugadorId = this.registry.get('jugadorId');
+
+            const finPorDesconexion = this.registry.get('finPorDesconexion');
+            console.log("🏁 Resultado por desconexión:", finPorDesconexion);
+        
+            if (finPorDesconexion) {
+                this.add.text(this.cameras.main.centerX, 40, "Fin de la partida por desconexión del jugador", {
+                    font: "28px Arial Black",
+                    color: "#ffffff",
+                    stroke: "#000000",
+                    strokeThickness: 4,
+                    align: "center"
+                }).setOrigin(0.5);
+            }
 
         let fondoKey = '';
         let mensaje = '';
 
-        // Determinar el resultado y el fondo correspondiente
-        if (puntosA > puntosB) {
-            fondoKey = 'fondo_victoria_gatoA';  // Gato A gana
-            mensaje = '¡Gato A gana!';
-        } else if (puntosA < puntosB) {
-            fondoKey = 'fondo_victoria_gatoB';  // Gato B gana
-            mensaje = '¡Gato B gana!';
-        } else {
-            fondoKey = 'fondo_empate';  // Empate
+        if (esEmpate) {
+            fondoKey = 'fondo_empate';
             mensaje = '¡Es un empate!';
+        } else if (esGanador) {
+            fondoKey = jugadorId === 1 ? 'fondo_victoria_gatoA' : 'fondo_victoria_gatoB';
+            mensaje = '¡Has ganado!';
+        } else {
+            fondoKey = jugadorId === 1 ? 'fondo_victoria_gatoB' : 'fondo_victoria_gatoA';
+            mensaje = '¡Has perdido!';
         }
 
-        // Asignar fondo correspondiente
+        // Fondo
         this.add.image(370, 200, fondoKey).setOrigin(0.29).setScale(0.75);
 
-        // Mostrar mensaje
-        this.add.text(650, 50, mensaje, {
-            font: '45px Arial',
-            color: '#000000',
+        // Mensaje principal
+        this.add.text(650, 630, mensaje, {
+            font: '48px Arial',
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 6,
         }).setOrigin(0.5);
 
-        // Mostrar puntuaciones
-        this.add.text(200, 100, `Gato A: ${puntosA}\nGato B: ${puntosB}`, {
-            font: '45px Arial',
-            color: '#000000',
-            align: 'center',
+        // Texto de puntuaciones - más abajo y más centrado
+        this.add.text(650, 690, `Gato A: ${puntosA}   |   Gato B: ${puntosB}`, {
+            font: '48px Arial',
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 6,
         }).setOrigin(0.5);
 
-        // Botón para volver al inicio del juego
-        // Botón de continuar
-        const nextButton = this.add.image(1200, 700, 'Boton_continuar_normal').setOrigin(1, 1).setInteractive().setScale(0.7)
-        nextButton.on('pointerover', () => {
-            nextButton.setTexture('Boton_continuar_encima');
-        });
+        // Botón para volver al menú
+        const nextButton = this.add.image(1200, 700, 'Boton_continuar_normal')
+            .setOrigin(1, 1)
+            .setInteractive()
+            .setScale(0.7);
 
-        nextButton.on('pointerout', () => {
-            nextButton.setTexture('Boton_continuar_normal');
-        });
-
-        nextButton.on('pointerdown', () => {
-            nextButton.setTexture('Boton_continuar_pulsado');
-        });
-
+        nextButton.on('pointerover', () => nextButton.setTexture('Boton_continuar_encima'));
+        nextButton.on('pointerout', () => nextButton.setTexture('Boton_continuar_normal'));
+        nextButton.on('pointerdown', () => nextButton.setTexture('Boton_continuar_pulsado'));
         nextButton.on('pointerup', () => {
             nextButton.setTexture('Boton_continuar_normal');
-            this.scene.start('MenuPrincipal'); // Vuelve al menú principal
+            this.scene.start('MenuPrincipal');
         });
+
+        if (finPorDesconexion) {
+            this.add.text(config.width / 2, 40, "Fin de la partida por desconexión del jugador", {
+                font: "28px Arial Black",
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 4,
+                align: "center"
+            }).setOrigin(0.5).setDepth(10);
+            this.registry.set('finPorDesconexion', false);
+
+        }
+
     }
-} 
+}

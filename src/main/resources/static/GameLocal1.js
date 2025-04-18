@@ -523,53 +523,28 @@ isInFishingZone(sprite, zones) {
 }
 
 update(time, delta) {
-    console.log(gatoA.width, gatoA.height);
-    const deltaSegundos = delta / 1000;
     
     // MOVIMIENTO DEL GATOA
     if(gatoA.canMove==true){
         if (keys.D.isDown) {
-            const nuevaX = gatoA.x + 160 * delta; // Predice nueva posición horizontal
-            console.log('Intentando mover derecha a:', nuevaX, gatoA.y);
-            if (!this.enZonaProhibida(nuevaX, gatoA.y, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityX(160);
                 gatoA.anims.play('caminar_drchA', true);
                 izqA = false;
-                console.log('Movimiento permitido');
-            } else {
-                gatoA.setVelocityX(0); // Bloquear el movimiento
-                console.log('Bloqueado por zona prohibida');
-            }
         } else if (keys.A.isDown) {
-            const nuevaX = gatoA.x - 160 * delta; // Predice nueva posición horizontal
-            if (!this.enZonaProhibida(nuevaX, gatoA.y, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityX(-160);
                 gatoA.anims.play('caminar_izqA', true);
                 izqA = true;
-            } else {
-                gatoA.setVelocityX(0); // Bloquear el movimiento
-            }
         }else{
             gatoA.setVelocityX(0);  // Detener el movimiento horizontal
         }
         if (keys.W.isDown) {
-            const nuevaY = gatoA.y - 160 * delta; // Predice nueva posición horizontal
-            if (!this.enZonaProhibida(nuevaY, gatoA.x, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityY(-160);
                 gatoA.anims.play('espaldasA', true);
                 arribaA = true;
-            } else {
-                gatoA.setVelocityY(0); // Bloquear el movimiento
-            }
         } else if (keys.S.isDown) {
-            const nuevaY = gatoA.y + 160 * delta; // Predice nueva posición horizontal
-            if (!this.enZonaProhibida(nuevaY, gatoA.x, gatoA.width, gatoA.height)) {
                 gatoA.setVelocityY(160);
                 gatoA.anims.play('frenteA', true);
                 arribaA = false;
-            } else {
-                gatoA.setVelocityY(0); // Bloquear el movimiento
-            }
         } else {
             gatoA.setVelocityY(0); 
         }
@@ -802,6 +777,46 @@ update(time, delta) {
             lanzado.play(animPezGlobo, true);
             this.explotarPezGlobo(lanzado);
         }
+
+        this.peces.children.iterate(pez => {
+            if (
+                pez &&
+                pez.texture.key === 'pezGlobo' &&
+                pez.tiempoExplosion &&
+                this.time.now >= pez.tiempoExplosion &&
+                !pez.explotado
+            ) {
+                pez.explotado = true;
+                pez.play('explotarPG', true);
+        
+                let framesAnim = this.anims.get('explotarPG').frames.length;
+                let frameRateAnim = this.anims.get('explotarPG').frameRate;
+                let duracion = (framesAnim / frameRateAnim) * 1000;
+        
+                this.time.delayedCall(duracion, () => {
+                    if (pez.active) {
+                        pez.destroy();
+                        this.sonidoExplosion.play();
+                    }
+                });
+        
+                let explosion = new Phaser.Math.Vector2(pez.x, pez.y);
+                let coordA = new Phaser.Math.Vector2(gatoA.x, gatoA.y);
+                let coordB = new Phaser.Math.Vector2(gatoB.x, gatoB.y);
+                let radio = 200;
+        
+                if (coordA.distance(explosion) <= radio) {
+                    puntosA -= 2;
+                    textoA.setText(" " + puntosA);
+                }
+        
+                if (coordB.distance(explosion) <= radio) {
+                    puntosB -= 2;
+                    textoB.setText(" " + puntosB);
+                }
+            }
+        });
+        
     }
 
 
@@ -1008,7 +1023,8 @@ explotarPezGlobo(pez) {
         return;
     }
 
-    let tiempo = 7000; // Duración de la animación de explosión en milisegundos
+    const tiempo = 4000;
+    pez.tiempoExplosion = this.time.now + tiempo; // Guardamos el momento exacto en que debe explotar
 
     let coordA = new Phaser.Math.Vector2(gatoA.x, gatoA.y);
     let coordB = new Phaser.Math.Vector2(gatoB.x, gatoB.y);
