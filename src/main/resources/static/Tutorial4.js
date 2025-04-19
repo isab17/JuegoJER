@@ -62,14 +62,14 @@ class TutorialScene4 extends Phaser.Scene {
 
 
         //Textos Menta
-        this.add.text(320, 200, 'MARIO', {
+        this.add.text(320, 200, 'MENTA', {
             font: 'bold 20px Arial',
             color: '#013220',
             align: 'center'
         }).setOrigin(0.05);
 
         //Textos Chocolate
-        this.add.text(845, 200, 'LUIGI', {
+        this.add.text(845, 200, 'CHOCOLATE', {
             font: 'bold 20px Arial',
             color: '#013220',
             align: 'center'
