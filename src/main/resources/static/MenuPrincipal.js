@@ -77,7 +77,7 @@ class MenuPrincipal extends Phaser.Scene {
                 if (this.serverActive) {
                     this.botonOnline.setTexture('Online_normal');
                     sonidoBoton.play();
-                    this.scene.start('Partidas');
+                    this.scene.start('partida');
                 }
             });
         

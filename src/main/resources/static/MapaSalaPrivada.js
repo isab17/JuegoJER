@@ -24,9 +24,9 @@ const MSG_TYPES = ({
 
 });
 
-class MapaOnline extends Phaser.Scene {
+class MapaSalaPrivada extends Phaser.Scene {
     constructor() {
-        super({ key: "MapaOnline" });
+        super({ key: "mapaSalaPriv" });
 
         // === WebSocket ===
         /** @type {WebSocket|null} */
@@ -69,7 +69,9 @@ class MapaOnline extends Phaser.Scene {
         if (!this.registry.has("socket")) {
         const socket = new WebSocket("ws://localhost:8080/ws");
         this.registry.set("socket", socket);
+
         this.setupWebSocket();
+
         }
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
@@ -91,29 +93,6 @@ class MapaOnline extends Phaser.Scene {
         this.crearBotonMapa('JuegoMesa', 2, config.width / 2, config.height / 2);
         this.crearBotonMapa('Vortice', 3, this.scale.width * 0.85, this.scale.height * 0.52, -90, 0.2);
 
-         // BOTÓN DE RETROCEDER
-        const backButton = this.add.image(0, 700, 'Boton_atras_normal')
-        .setOrigin(0, 1)
-        .setInteractive()
-        .setScale(0.7);
-
-        backButton.on('pointerover', () => {
-            backButton.setTexture('Boton_atras_encima');
-        });
-
-        backButton.on('pointerout', () => {
-            backButton.setTexture('Boton_atras_normal');
-        });
-
-        backButton.on('pointerdown', () => {
-            backButton.setTexture('Boton_atras_pulsado');
-        });
-
-        backButton.on('pointerup', async () => {
-            backButton.setTexture('Boton_atras_normal');
-            this.scene.start('partida');
-            
-        });
 
         this.checkServerStatus();
 

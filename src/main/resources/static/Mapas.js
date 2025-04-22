@@ -100,6 +100,31 @@ class Mapa extends Phaser.Scene {
         this.scene.start('GameLocal3');
     
     });
+
+     // BOTÓN DE RETROCEDER
+     const backButton = this.add.image(0, 700, 'Boton_atras_normal')
+     .setOrigin(0, 1)
+     .setInteractive()
+     .setScale(0.7);
+
+    backButton.on('pointerover', () => {
+        backButton.setTexture('Boton_atras_encima');
+    });
+
+    backButton.on('pointerout', () => {
+        backButton.setTexture('Boton_atras_normal');
+    });
+
+    backButton.on('pointerdown', () => {
+        backButton.setTexture('Boton_atras_pulsado');
+    });
+
+    backButton.on('pointerup', async () => {
+        backButton.setTexture('Boton_atras_normal');
+        this.scene.start('MenuPrincipal');
+        
+    });
+
     }
 
 }
