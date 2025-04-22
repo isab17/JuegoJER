@@ -216,7 +216,7 @@ Los peces peligrosos (como las pirañas y los peces globo) desaparecen de la pan
 
 ## 5. Estados e Interfaces
 ### 5.1. Diagrama de Estados
-![Estados](https://github.com/user-attachments/assets/287067ba-5bb2-450a-85d0-5df5159e049c)
+![Estados](GDD/Diagramas/Estados.jpg)
 
 ### 5.2. Pantallas e Interfaces
 Pantalla de inicio con un botón de jugar, tutorial, chat, créditos y otro para salir al escritorio. Además, incluye un indicador de estado de conexión.
@@ -247,10 +247,10 @@ Pantalla de selección de escenario con 3 posibles opciones desbloqueables con e
 ![Escenarios](https://github.com/user-attachments/assets/91c29fd6-2344-4539-aa83-9f2c8752f722)
 
 Pantalla de inicio de sesión y de registro (Intercambiables) para jugar online en el servidor. Además, de dos pantallas de eliminar usuario y cambio de contraseña, también intercambiables y accesibles.
-![Inicio de Sesión](https://github.com/user-attachments/assets/96036bb2-5c1d-4d6b-98f3-fcdcabd1d72f)
-![Registro](https://github.com/user-attachments/assets/70550e27-863a-4386-92e1-11449201c087)
-![Cambio de Contraseña](https://github.com/user-attachments/assets/4070b0bb-f360-4587-afad-afc7da3c8ef9)
-![Eliminar Usuario](https://github.com/user-attachments/assets/86ada251-9036-4d05-979e-9b2b2b8b5fdd)
+![Inicio de Sesión](GDD/Pantallas/InicioSesion.png)
+![Registro](GDD/Pantallas/Registro.png)
+![Cambio de Contraseña](GDD/Pantallas/CambiarContraseña.png)
+![Eliminar Usuario](GDD/Pantallas/EliminarUsuario.png)
 
 Pantalla de tutorial con los controles del juego y un botón de regreso a la pantalla de inicio.
 ![Tutorial 1](https://github.com/user-attachments/assets/830b0f3e-4f7b-4f57-ad46-1415b995f49a)
