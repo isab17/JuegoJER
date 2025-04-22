@@ -60,7 +60,6 @@ public class UserController {
    public void disconnectedUser(@RequestBody String username){
     usuarioService.disconnectUser(username);
    }
-   
    // Endpoint para obtener usuarios conectados desde un umbral de tiempo
    @GetMapping("/connected-since/{threshold}")
    public List<String> getConnectedUsers(@PathVariable long threshold) {

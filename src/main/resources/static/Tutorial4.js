@@ -1,16 +1,20 @@
-// Escena 3 del tutorial
-class TutorialScene3 extends Phaser.Scene {
+// Escena 4 del tutorial
+class TutorialScene4 extends Phaser.Scene {
     constructor() {
-        super({key: "TutorialScene3"});
+        super({key: "TutorialScene4"});
     }
 
     preload() {
         // Carga las imágenes que usarás en el tutorial
         this.load.image('Tutorial_fondo', 'assets/Interfaces montadas/fondo_x.png');
 
-        this.load.image('Escenario1', 'assets/Escenario/Zonas de Pesca/Escenario 1 Zona de Pesca.png');
-        this.load.image('Escenario2', 'assets/Escenario2/Zonas de Pesca/Escenario 2 Zonas de Pesca.png');
-        this.load.image('Escenario3', 'assets/Escenario3/ZonaPesca3.png');
+        this.load.image('CaraGatoA', 'assets/inventario/Menta.png');
+        this.load.image('CaraGatoB', 'assets/inventario/Chocolate.png');
+
+        this.load.image('WASD', 'assets/Interfaces montadas/Teclas/Menta/WASD.png');
+        this.load.image('E', 'assets/Interfaces montadas/Teclas/Menta/E.png');
+        this.load.image('F', 'assets/Interfaces montadas/Teclas/Menta/F.png');
+        this.load.image('Q', 'assets/Interfaces montadas/Teclas/Menta/Q.png');
 
         // Botones con 3 estados
         this.load.image('Boton_continuar_normal', 'assets/Interfaces montadas/continuar/normal.png');
@@ -32,25 +36,69 @@ class TutorialScene3 extends Phaser.Scene {
         const sonidoBoton= this.sound.add("sonidoBoton", { loop: false, volume: 0.5 });
 
         // Título
-        this.add.text(620, 100, 'Zonas de Pesca', {
+        this.add.text(620, 100, 'Controles modo online', {
             font: 'bold 80px Gabriola',
             color: '#000000'
         }).setOrigin(0.5);
 
-        //Escenarios
-        const Escenario1 = this.add.image(300 , 250, 'Escenario1');
-        Escenario1.setScale(0.2);
-        const Escenario2 = this.add.image(900, 250, 'Escenario2');
-        Escenario2.setScale(0.2);
-        const Escenario3 = this.add.image(600, 490, 'Escenario3');
-        Escenario3.setScale(0.1);
+        // Imágenes gatos
+        gatoA = this.add.image(350, 330, 'CaraGatoA'); // Imagen a la izquierda del todo
+        gatoA.setScale(0.4);
+        gatoB = this.add.image(870, 330, 'CaraGatoB'); // Imagen a la derecha del todo
+        gatoB.setScale(0.4);
 
-        // Texto central
-        this.add.text(300, 620, 'Para pescar, debes colocarte en las zonas destacadas\ny pulsar la respectiva tecla', {
-            font: 'bold 24px Arial',
+        
+        this.WASD = this.add.image(620, 510, 'WASD');
+        this.WASD.setScale(0.4);
+
+        this.E = this.add.image(710, 450, 'E');
+        this.E.setScale(0.4);
+
+        this.F = this.add.image(470, 535, 'F');
+        this.F.setScale(0.4);
+
+        this.Q = this.add.image(535, 450, 'Q');
+        this.Q.setScale(0.4);
+
+
+        //Textos Menta
+        this.add.text(320, 200, 'MARIO', {
+            font: 'bold 20px Arial',
+            color: '#013220',
+            align: 'center'
+        }).setOrigin(0.05);
+
+        //Textos Chocolate
+        this.add.text(845, 200, 'LUIGI', {
+            font: 'bold 20px Arial',
+            color: '#013220',
+            align: 'center'
+        }).setOrigin(0.05);
+
+        this.add.text(495, 480, 'Pescar', {
+            font: 'bold 20px Arial',
             color: '#000000',
-            align: 'center',
-        }).setOrigin(0.03);
+            align: 'left'
+        }).setOrigin(0.05);
+
+        this.add.text(670, 480, 'Inventario', {
+            font: 'bold 20px Arial',
+            color: '#000000',
+            align: 'left'
+        }).setOrigin(0.05);
+
+        this.add.text(570 , 580, 'Movimiento', {
+            font: 'bold 20px Arial',
+            color: '#000000',
+            align: 'left'
+        }).setOrigin(0.05);
+
+        this.add.text(440, 565, 'Atacar', {
+            font: 'bold 20px Arial',
+            color: '#000000',
+            align: 'left'
+        }).setOrigin(0.05);
+
 
         // Botón de retroceder en la esquina inferior izquierda
         const backButton = this.add.image(0, 700, 'Boton_atras_normal').setOrigin(0, 1).setInteractive().setScale(0.7);
@@ -70,7 +118,7 @@ class TutorialScene3 extends Phaser.Scene {
         backButton.on('pointerup', () => {
             backButton.setTexture('Boton_atras_normal');
             sonidoBoton.play();
-            this.scene.start('TutorialScene2');
+            this.scene.start('TutorialScene1'); // Vuelve al menú principal
         });
 
         // Botón de continuar
@@ -91,7 +139,7 @@ class TutorialScene3 extends Phaser.Scene {
         nextButton.on('pointerup', () => {
             nextButton.setTexture('Boton_continuar_normal');
             sonidoBoton.play();
-            this.scene.start('MenuPrincipal');
+            this.scene.start('TutorialScene2'); // Cambia a la siguiente escena
         });
     }
 }

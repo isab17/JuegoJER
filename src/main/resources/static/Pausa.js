@@ -71,11 +71,16 @@ class PauseMenu extends Phaser.Scene {
         
         botonVolver.on('pointerup', () => {
             botonVolver.setTexture('Boton_volver_normal');
-            if (this.escenaPrevia) {
-                this.scene.resume(this.escenaPrevia);
+            sonidoBoton.play();
+        
+            const jugadorId = this.registry.get('jugadorId');
+            if (jugadorId) {
+                this.registry.set('yoHeDadoAVolver', true);
+                this.registry.get('socket').send('v' + jugadorId); // ← ENVÍA SOLO EL ID
             }
-            this.scene.stop(); // Detener la escena PauseMenu para evitar conflictos
+
         });
+        
         
     }
 }

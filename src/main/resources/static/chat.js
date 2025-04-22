@@ -13,6 +13,9 @@ class Chat extends Phaser.Scene {
         this.load.image('Boton_atras_normal', 'assets/Interfaces montadas/volver/normal.png');
         this.load.image('Boton_atras_encima', 'assets/Interfaces montadas/volver/seleccionado.png');
         this.load.image('Boton_atras_pulsado', 'assets/Interfaces montadas/volver/pulsado.png');
+
+        this.load.image("botonConectado", "assets/Pantalla_inicio/iconos/conectado.png");
+        this.load.image("botonDesconectado", "assets/Pantalla_inicio/iconos/desconectado.png");
     }
 
     create() {
@@ -25,19 +28,22 @@ class Chat extends Phaser.Scene {
         // Crear un formulario de chat oculto inicialmente
         this.chatContainer = this.add.container(200, 200);
 
+        const baseUrl = `${window.location.origin}/api/chat`;
+
         // Fondo para el chat
         const chatBackground = this.add.rectangle(230, 100, 345, 300, 0x000000, 0.3)
         .setOrigin(0)
         .setStrokeStyle(2, 0xffffff);
         this.chatContainer.add(chatBackground);
     
+        this.botonServer = this.add.image(config.width - 50, 50, "botonDesconectado").setScale(0.05);
 
         // Campo de entrada (simulado)
         const messageInput = this.add.rectangle(240, 350, 250, 30, 0xffffff, 0.9).setOrigin(0);
         this.chatContainer.add(messageInput);
         
 
-        this.inputText = this.add.text(250,355,'',{
+        this.inputText = this.add.text(250,355,'',{//15, 155, '', {
             font: '16px Arial',
             color: '#000'
         }).setOrigin(0);
@@ -60,6 +66,8 @@ class Chat extends Phaser.Scene {
                 this.inputText.setText('');
             }
         });
+        this.checkServerStatus();
+
         this.chatContainer.add(sendButton);
 
         // Contenedor de mensajes
@@ -166,6 +174,14 @@ class Chat extends Phaser.Scene {
         this.nombre = localStorage.getItem('nombre');
         console.log('Nombre de usuario:', this.nombre);
 
+        // Verificar estado del servidor
+        this.time.addEvent({
+            delay: 5000,
+            callback: this.checkServerStatus,
+            callbackScope: this,
+            loop: true,
+        });
+
     }
 
     fetchMessages(initialLoad = false) {
@@ -244,6 +260,27 @@ class Chat extends Phaser.Scene {
         if (this.updateInterval) {
             clearInterval(this.updateInterval); // Detén el intervalo
         }
+    }
+
+    async checkServerStatus() {
+        fetch('/api/users/status')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('El servidor no está activo');
+                }
+                return response.text();
+            })
+            .then(status => {
+                if (status === "active") {
+                    this.serverActive = true;
+                    this.botonServer.setTexture("botonConectado");
+                }
+            })
+            .catch(error => {
+                console.error('Error al verificar el estado del servidor:', error);
+                this.serverActive = false;
+                this.botonServer.setTexture("botonDesconectado");
+            });
     }
     
 }

@@ -43,103 +43,97 @@ class TutorialScene1 extends Phaser.Scene {
         const sonidoBoton= this.sound.add("sonidoBoton", { loop: false, volume: 0.5 });
 
         // Título
-        this.add.text(620, 100, 'Objetivo y Controles', {
+        this.add.text(620, 100, 'Controles modo local', {
             font: 'bold 80px Gabriola',
             color: '#000000'
         }).setOrigin(0.5);
 
         // Imágenes gatos
-        gatoA = this.add.image(200 + 150, 280, 'CaraGatoA'); // Imagen a la izquierda del todo
+        gatoA = this.add.image(350, 330, 'CaraGatoA'); // Imagen a la izquierda del todo
         gatoA.setScale(0.4);
-        gatoB = this.add.image(1050 - 180, 280, 'CaraGatoB'); // Imagen a la derecha del todo
+        gatoB = this.add.image(870, 330, 'CaraGatoB'); // Imagen a la derecha del todo
         gatoB.setScale(0.4);
 
         //Imagenes Teclas
-        this.WASD = this.add.image(200 + 150 , 460, 'WASD');
+        this.WASD = this.add.image(350 , 510, 'WASD');
         this.WASD.setScale(0.4);
-        this.FLECHAS = this.add.image(1050 - 180, 460, 'Flechas');
+        this.FLECHAS = this.add.image(870, 510, 'Flechas');
         this.FLECHAS.setScale(0.4);
 
-        this.E = this.add.image(290 + 150, 400, 'E');
+        this.E = this.add.image(540, 450, 'E');
         this.E.setScale(0.4);
-        this.L = this.add.image(1140 - 180, 400, 'L');
+        this.L = this.add.image(960, 450, 'L');
         this.L.setScale(0.4);
 
-        this.F = this.add.image(350 + 150, 485, 'F');
+        this.F = this.add.image(500, 535, 'F');
         this.F.setScale(0.4);
-        this.O = this.add.image(900 - 180, 485, 'O');
+        this.O = this.add.image(720, 535, 'O');
         this.O.setScale(0.4);
 
-        this.Q = this.add.image(105 + 150, 400, 'Q');
+        this.Q = this.add.image(255, 450, 'Q');
         this.Q.setScale(0.4);
-        this.P = this.add.image(955 - 180, 400, 'P');
+        this.P = this.add.image(775, 450, 'P');
         this.P.setScale(0.4);
 
 
-        // Texto central
-        this.add.text(390, 600, 'Obten el mayor número de puntos,\nrecogiendo todos los peces que puedas,\nen el tiempo establecido', {
-            font: 'bold 24px Arial',
-            color: '#000000',
-            align: 'center',
-        }).setOrigin(0.03);      
-
+        
         //Textos Menta
-        this.add.text(170 + 150, 150, 'MENTA', {
+        this.add.text(320, 200, 'Mario', {
             font: 'bold 20px Arial',
             color: '#013220',
             align: 'center'
         }).setOrigin(0.05);
 
-        this.add.text(75 + 150, 430, 'Pescar', {
+        this.add.text(225, 480, 'Pescar', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
         }).setOrigin(0.05);
 
-        this.add.text(250 + 150, 430, 'Inventario', {
+        this.add.text(500, 480, 'Inventario', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
         }).setOrigin(0.05);
 
-        this.add.text(150 + 150, 530, 'Movimiento', {
+        this.add.text(300, 580, 'Movimiento', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
         }).setOrigin(0.05);
 
-        this.add.text(325 + 150, 515, 'Atacar', {
+        this.add.text(475, 565, 'Atacar', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
         }).setOrigin(0.05);
         
         //Textos Chocolate
-        this.add.text(990 - 180, 150, 'CHOCOLATE', {
+        this.add.text(850, 200, 'Luigi', {
             font: 'bold 20px Arial',
             color: '#013220',
             align: 'center'
         }).setOrigin(0.05);
 
-        this.add.text(1110 - 190, 430, 'Inventario', {
+        this.add.text(920, 480, 'Inventario', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
         }).setOrigin(0.05);
 
-        this.add.text(860 - 170, 515, 'Atacar', {
+        this.add.text(690, 565, 'Atacar', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
         }).setOrigin(0.05);
 
-        this.add.text(1000- 180 , 530, 'Movimiento', {
+        this.add.text(820 , 580, 'Movimiento', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
         }).setOrigin(0.05);
 
-        this.add.text(925 - 180, 430, 'Pescar', {
+        this.add.text(745, 480, 'Pescar', {
             font: 'bold 20px Arial',
             color: '#000000',
             align: 'left'
@@ -185,7 +179,7 @@ class TutorialScene1 extends Phaser.Scene {
         nextButton.on('pointerup', () => {
             nextButton.setTexture('Boton_continuar_normal');
             sonidoBoton.play();
-            this.scene.start('TutorialScene2'); // Cambia a la siguiente escena
+            this.scene.start('TutorialScene4'); // Cambia a la siguiente escena
         });
     }
 }

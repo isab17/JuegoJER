@@ -1,12 +1,12 @@
-class GameLocal1 extends Phaser.Scene {
+class GameLocal3 extends Phaser.Scene {
 
     constructor() {
-        super({key: "GameLocal1"}); // Nombre único de la escena
+        super({key: "GameLocal3"}); // Nombre único de la escena
     }
 
 preload() {
     // Aquí es donde normalmente cargarías imágenes, sonidos, etc.
-    this.load.image("escenario", "assets/Escenario/v8/Final.png");
+    this.load.image("escenario", "assets/Escenario3/Final.png");
     
     this.load.image("inv_sinDesplegar_normal_gatoA", "assets/inventario/version_chica/salir_chico_1.png");
     this.load.image("inv_sinDesplegar_normal_gatoB", "assets/inventario/version_chica/salir_chico_2.png");
@@ -30,7 +30,8 @@ preload() {
     this.load.image('CaraGatoA', 'assets/inventario/Menta.png');
     this.load.image('CaraGatoB', 'assets/inventario/Chocolate.png');
 
-    // Cargar la música
+
+    // Cargar la música del juego
     //this.load.audio("backgroundMusic", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
     this.load.audio("sonidoBoton", "assets/musica/SonidoBoton.mp3");
     this.load.audio("sonidoPezBueno", "assets/musica/RecogerPezBueno.mp3");
@@ -46,35 +47,17 @@ preload() {
 
 // Función create para inicializar objetos una vez que se han cargado los recursos
 create() {
+    
+    //Guardado de la hora de inicio de la partida
+    this.horaInicio = new Date().toISOString().replace('Z', '');
 
     // Crear la imagen y ajustarla al tamaño del escenario
     const background = this.add.image(config.width / 2, config.height / 2, 'escenario'); // Centrar la imagen
-    background.setScale(config.width / background.width, config.height / background.height); // Escalar la imagen
+    background.setScale(
+        (this.scale.width / background.width) , // Aumentar 20% el ancho
+        (this.scale.height)  / background.height // Mantener altura normal
+    );
 
-
-    //Inventario A
-    this.inventario_Pleg_A=this.add.container(33, config.height / 2); //Contenedor de la interfaz plegada
-    this.inventario_Pleg_A.setScale(0.4, 0.4);
-    const inventarioPlegadoA = this.add.image(0, 0, 'inv_sinDesplegar_normal_gatoA');   //Imagen plegada
-    this.inventario_Pleg_A.add([inventarioPlegadoA]);  // Añadir imagen al container
-    this.inventario_Pleg_A.setVisible(true);       //Inicialmente se ve
-    
-    
-    this.inventario_Des_A=this.add.container(83, config.height / 2); //Contenedor de la interfaz plegada
-    this.inventario_Des_A.setScale(0.4, 0.4);
-    const inventarioDesplegadoA = this.add.image(0, 0, 'inv_Desplegado_normal_gatoA');   //Imagen plegada
-    this.inventario_Des_A.add([inventarioDesplegadoA]);  // Añadir imagen al container
-    this.inventario_Des_A.setVisible(false);       //Inicialmente no se ve
-    this.abiertoA=false;
-    
-
-    //Pez globo inflado y desinflado en el inventario A
-    this.pezGlobo_Desinf_A=this.add.image(55, 360, 'pezGloboDesinf');
-    this.pezGlobo_Desinf_A.setScale(0.18,0.18);
-    this.pezGlobo_Desinf_A.setVisible(false);
-    this.pezGloboA=false;
-
-   
     //Inventario B
     this.inventario_Pleg_B=this.add.container(1167, config.height / 2); //Contenedor de la interfaz plegada
     this.inventario_Pleg_B.setScale(0.4, 0.4);
@@ -82,19 +65,42 @@ create() {
     this.inventario_Pleg_B.add([inventarioPlegadoB]);  // Añadir imagen al container
     this.inventario_Pleg_B.setVisible(true);       //Inicialmente no se ve
     
+
     this.inventario_Des_B=this.add.container(1117, config.height / 2); //Contenedor de la interfaz plegada
     this.inventario_Des_B.setScale(0.4, 0.4);
     const inventarioDesplegadoB = this.add.image(0, 0, 'inv_Desplegado_normal_gatoB');   //Imagen plegada
     this.inventario_Des_B.add([inventarioDesplegadoB]);  // Añadir imagen al container
     this.inventario_Des_B.setVisible(false);       //Inicialmente se ve
     this.abiertoB=false;
-   
+    
 
-    //Pez globo inflado y desinflado en el inventario B
-    this.pezGlobo_Desinf_B=this.add.image(1145, 358, 'pezGloboDesinf');
+    //Pez globo inflado y desinflado en el inventario A
+    this.pezGlobo_Desinf_B=this.add.image(55, 360, 'pezGloboDesinf');
     this.pezGlobo_Desinf_B.setScale(0.18,0.18);
     this.pezGlobo_Desinf_B.setVisible(false);
     this.pezGloboB=false;
+
+   
+    //Inventario A
+    this.inventario_Pleg_A=this.add.container(33, config.height / 2); //Contenedor de la interfaz plegada
+    this.inventario_Pleg_A.setScale(0.4, 0.4);
+    const inventarioPlegadoA = this.add.image(0, 0, 'inv_sinDesplegar_normal_gatoA');   //Imagen plegada
+    this.inventario_Pleg_A.add([inventarioPlegadoA]);  // Añadir imagen al container
+    this.inventario_Pleg_A.setVisible(true);       //Inicialmente se ve
+    
+    this.inventario_Des_A=this.add.container(83, config.height / 2); //Contenedor de la interfaz plegada
+    this.inventario_Des_A.setScale(0.4, 0.4);
+    const inventarioDesplegadoA = this.add.image(0, 0, 'inv_Desplegado_normal_gatoA');   //Imagen plegada
+    this.inventario_Des_A.add([inventarioDesplegadoA]);  // Añadir imagen al container
+    this.inventario_Des_A.setVisible(false);       //Inicialmente no se ve
+    this.abiertoA=false;
+   
+
+    //Pez globo inflado y desinflado en el inventario B
+    this.pezGlobo_Desinf_A=this.add.image(1145, 358, 'pezGloboDesinf');
+    this.pezGlobo_Desinf_A.setScale(0.18,0.18);
+    this.pezGlobo_Desinf_A.setVisible(false);
+    this.pezGloboA=false;
 
     // Efectos de sonido
         const sonidoBoton= this.sound.add("sonidoBoton", { loop: false, volume: 0.5 });
@@ -117,13 +123,13 @@ create() {
    this.timerBackground.setDepth(9);         // Establecer la profundidad para asegurarse de que se dibuje encima de otros elementos
 
     //Puntos de los jugadores
-    const caraGatoA =this.add.image(170, 35, 'CaraGatoA');
-    caraGatoA.setScale(0.15, 0.15);
-    textoA=this.add.text(220,13, " 0 ", {font: "30px Arial Black"});      // AJUSTAR LETRA, TAMAÑO, ETC
+    const caraGatoA =this.add.image(450, 50, 'CaraGatoA');
+    caraGatoA.setScale(0.18, 0.18);
+    textoA=this.add.text(345,35, " 0 ", {font: "30px Arial Black",color: "#000000"});      // AJUSTAR LETRA, TAMAÑO, ETC
 
-    const caraGatoB =this.add.image(1030, 35, 'CaraGatoB');
-    caraGatoB.setScale(0.15, 0.15);
-    textoB=this.add.text(945,13, " 0 ", {font: "30px Arial Black"});      // AJUSTAR LETRA, TAMAÑO, ETC
+    const caraGatoB =this.add.image(750, 50, 'CaraGatoB');
+    caraGatoB.setScale(0.18, 0.18);
+    textoB=this.add.text(795,35, " 0 ", {font: "30px Arial Black",color: "#000000"});      // AJUSTAR LETRA, TAMAÑO, ETC
     
     const botonPausa = this.add.image(1150, 40, 'Boton_pausa_normal').setInteractive().setScale(0.45);
 
@@ -350,20 +356,20 @@ this.timerText.setDepth(10);         // Establecer la profundidad para asegurars
 
     
     // Crear el gatoB
-    gatoB = this.physics.add.sprite(1090, 160, 'gatoB');
-    gatoB.setScale(0.25).setFrame(1);
+    gatoB = this.physics.add.sprite(510, 620, 'gatoB');
+    gatoB.setScale(0.30).setFrame(1);
     gatoB.setSize(280, 57); // Ajusta el tamaño del área de colisión (ancho y alto)
     gatoB.setOffset(0, 453);
-    gatoB.setCollideWorldBounds(false);
+    gatoB.setCollideWorldBounds(true);
     gatoB.name='GatoB';
     gatoB.canMove=true;
 
     // Crear el gatoA
-    gatoA = this.physics.add.sprite(200, 620, 'gatoA');
-    gatoA.setScale(0.25).setFrame(1);
+    gatoA = this.physics.add.sprite(670, 620, 'gatoA');
+    gatoA.setScale(0.30).setFrame(1);
     gatoA.setSize(280, 57); // Ajusta el tamaño del área de colisión (ancho y alto)
     gatoA.setOffset(0, 453);
-    gatoA.setCollideWorldBounds(false); 
+    gatoA.setCollideWorldBounds(true); 
     gatoA.name='GatoA';
     gatoA.canMove=true;
 
@@ -394,40 +400,126 @@ this.timerText.setDepth(10);         // Establecer la profundidad para asegurars
 
 
     //regiones 
-    arbusto = {x: 153, y: 75, width: 885, height: 565};
+    arbusto = {x: 0, y: 75, width: 1200, height: 560};
     zonasProhibidas=[
-        { x: 295, y: 600, width: 603, height: 120 }, // Región 2
-        { x: 295,y: 160, width: 196, height:380}, // Región 3
-        { x: 491, y: 180, width: 150, height:330}, // Región 4
-        {x: 766, y: 160, width: 140, height:90}, // Región 5
-        { x: 860, y: 250, width: 45, height: 200}, // Región 6
-        { x: 766, y: 450, width: 140, height: 96}, // Región 7
-        {x:641, y:200, width: 20, height:290}
+        //izquierda
+        { x: 0, y: 0, width: 25, height: 1000 },
+        { x: 25, y: 0, width: 25, height: 1000 },
+        { x: 50, y: 0, width: 25, height: 1000 }, 
+        { x: 75, y: 0, width: 25, height: 1000 },
+        { x: 100, y: 290, width: 25, height: 500 },
+        { x: 125, y: 300, width: 25, height: 500 },
+        { x: 150, y: 320, width: 25, height: 500 },
+        { x: 175, y: 330, width: 25, height: 500 },
+        { x: 200, y: 340, width: 25, height: 500 }, 
+        { x: 225, y: 350, width: 25, height: 500 },
+        { x: 250, y: 365, width: 25, height: 500 },
+        { x: 275, y: 380, width: 25, height: 500 },
+        { x: 300, y: 390, width: 25, height: 500 },
+        { x: 325, y: 400, width: 25, height: 500 },
+        { x: 350, y: 420, width: 25, height: 500 }, 
+        { x: 375, y: 430, width: 25, height: 500 },
+        { x: 400, y: 450, width: 25, height: 500 },
+        { x: 425, y: 460, width: 25, height: 500 },
+        { x: 450, y: 460, width: 5, height: 500 },
+
+        //derecha
+        { x: 1175, y: 0, width: 25, height: 1000 },
+        { x: 1150, y: 0, width: 25, height: 1000 },
+        { x: 1125, y: 0, width: 25, height: 1000 }, 
+        { x: 1100, y: 0, width: 25, height: 1000 },
+        { x: 1075, y: 270, width: 25, height: 500 },
+        { x: 1050, y: 285, width: 25, height: 500 },
+        { x: 1025, y: 300, width: 30, height: 500 },
+        { x: 1000, y: 310, width: 30, height: 500 },
+        { x: 975, y: 320, width: 30, height: 500 }, 
+        { x: 950, y: 340, width: 30, height: 500 },
+        { x: 925, y: 350, width: 30, height: 500 },
+        { x: 900, y: 365, width: 30, height: 500 },
+        { x: 875, y: 375, width: 30, height: 500 },
+        { x: 850, y: 390, width: 30, height: 500 },
+        { x: 820, y: 410, width: 30, height: 500 },
+        { x: 790, y: 420, width: 30, height: 500 }, 
+        { x: 770, y: 430, width: 25, height: 500 },
+        { x: 755, y: 440, width: 25, height: 500 },
+        { x: 740, y: 450, width: 25, height: 500 },
+        { x: 725, y: 460, width: 15, height: 500 },
+
+        //superior
+        { x: 100, y: 0, width: 1000, height: 25 },
+        { x: 180, y: 25, width: 820, height: 25 },
+        { x: 220, y: 50, width: 730, height: 25 },
+        { x: 260, y: 75, width: 640, height: 25 },
+        { x: 310, y: 100, width: 550, height: 25 },
+        { x: 330, y: 115, width: 500, height: 25 },
+        { x: 370, y: 130, width: 430, height: 25 },
+        { x: 400, y: 145, width: 380, height: 25 },
+
+        //centro
+        { x: 500, y: 370, width: 180, height: 25 },
+        { x: 500, y: 355, width: 180, height: 25 },
+        { x: 500, y: 340, width: 180, height: 25 },
+        { x: 500, y: 325, width: 180, height: 25 },
+        { x: 500, y: 310, width: 180, height: 25 },
+        { x: 500, y: 290, width: 180, height: 25 },
+        { x: 500, y: 275, width: 180, height: 25 },
+        { x: 500, y: 260, width: 180, height: 25 },
+        { x: 500, y: 245, width: 180, height: 25 },
+
     ];
+
+
     /*zonasProhibidas.forEach(region => {
-        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 0.2);
+        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0xff0000, 1);
         rect.setOrigin(0, 0); // Asegura que las coordenadas comiencen desde la esquina superior izquierda
     });*/
+
     agua=[
-        { x: 370, y:650, width: 503, height: 50 }, // Región 2
-        { x: 370,y: 0, width: 503, height:50}, // Región 3
-        { x: 370, y: 210, width: 250, height:270}, // Región 4
-        
+        { x: 500, y: 370, width: 180, height: 25 },
+        { x: 500, y: 355, width: 180, height: 25 },
+        { x: 500, y: 340, width: 180, height: 25 },
+        { x: 500, y: 325, width: 180, height: 25 },
+        { x: 500, y: 310, width: 180, height: 25 },
+        { x: 500, y: 290, width: 180, height: 25 },
+        { x: 500, y: 275, width: 180, height: 25 },
+        { x: 500, y: 260, width: 180, height: 25 },
+        { x: 500, y: 245, width: 180, height: 25 },
+
+        //inferior
+        { x: 170, y: 500, width: 100, height: 30 },
+        { x: 150, y: 470, width: 200, height: 30 },
+        { x: 120, y: 440, width: 300, height: 30 },
+        { x: 100, y: 410, width: 320, height: 30 },
+        { x: 80, y: 380, width: 200, height: 30 },
+        { x: 100, y: 350, width: 150, height: 30 },
+        { x: 80, y: 320, width: 100, height: 30 },
+        { x: 70, y: 290, width: 100, height: 30 },
+        { x: 60, y: 260, width: 100, height: 30 },
+        { x: 50, y: 230, width: 100, height: 30 },
     ]
-    /*agua.forEach(region => {
-        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 0.2);
+    /*
+    agua.forEach(region => {
+        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 1);
         rect.setOrigin(0, 0); // Asegura que las coordenadas comiencen desde la esquina superior izquierda
     });*/
+
     pesca=[
-        { x: 250, y:600, width: 20, height: 150 }, // Región 2
-        {x: 930, y:600, width: 20, height: 150}, // Región 3
-        { x: 250, y: 160, width: 20, height:380}, // Región 4
-        {x: 930, y: 160, width: 20, height:380},
-        {x: 680, y: 250, width: 170, height:200}
         
+        { x: 430, y: 200, width: 300, height: 240 },
+
+        //inferior
+        
+        { x: 100, y: 410, width: 300, height: 30 },
+        { x: 80, y: 380, width: 310, height: 30 },
+        { x: 100, y: 360, width: 300, height: 30 },
+        { x: 70, y: 330, width: 300, height: 30 },
+        { x: 70, y: 300, width: 300, height: 30 },
+        { x: 70, y: 270, width: 300, height: 30 },
+        { x: 50, y: 240, width: 200, height: 30 },
     ]
+
     /*pesca.forEach(region => {
-        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 0.2);
+        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 1);
         rect.setOrigin(0, 0); // Asegura que las coordenadas comiencen desde la esquina superior izquierda
     });*/
     
@@ -448,17 +540,35 @@ this.timerText.setDepth(10);         // Establecer la profundidad para asegurars
         });
     });
     tierra=[
-        {x:153,y:126,width:97,height:570},
-        {x:945,y:126,width:97,height:570},
-        {x:276,y:126,width:630,height:20},
-        {x:276,y:562,width:630,height:20},
-        {x:730,y:280,width:85,height:160},
+        {x:100,y:50,width:70,height:230},
+        {x:170,y:70,width:50,height:250},
+        {x:220,y:100,width:50,height:250},
+        {x:270,y:120,width:50,height:250},
+        {x:290,y:140,width:70,height:250},
+        {x:330,y:170,width:70,height:240},
+        {x:400,y:170,width:95,height:240},
+
+        {x:1000,y:45,width:70,height:230},
+        {x:970,y:60,width:50,height:240},
+        {x:920,y:90,width:50,height:240},
+        {x:870,y:120,width:50,height:240},
+        {x:800,y:150,width:70,height:240},
+        {x:750,y:170,width:70,height:240},
+        {x:685,y:170,width:95,height:260},
+
+
+
+
+        {x:460,y:400,width:255,height:500},
+        {x:460,y:170,width:255,height:80},
     ];
     /*tierra.forEach(region => {
-        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 0.2);
+        const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 1);
         rect.setOrigin(0, 0); // Asegura que las coordenadas comiencen desde la esquina superior izquierda
     });*/
-    
+   
+
+
     let limiteDePeces = 15;
     let pecesPorRegion = Math.floor(limiteDePeces / agua.length); // Peces por región
     let pecesExtras = limiteDePeces % agua.length; // Peces sobrantes
@@ -523,32 +633,34 @@ isInFishingZone(sprite, zones) {
 }
 
 update(time, delta) {
-    
-    // MOVIMIENTO DEL GATOA
-    if(gatoA.canMove==true){
+    console.log(gatoA.width, gatoA.height);
+    const deltaSegundos = delta / 1000;
+     // MOVIMIENTO DEL GATOA
+     if(gatoA.canMove==true){
         if (keys.D.isDown) {
-                gatoA.setVelocityX(160);
-                gatoA.anims.play('caminar_drchA', true);
-                izqA = false;
+            gatoA.setVelocityX(160);  // Mover a la derecha
+            gatoA.play('caminar_drchA', true);  // Reproducir animación
+            izqB=false;
         } else if (keys.A.isDown) {
-                gatoA.setVelocityX(-160);
-                gatoA.anims.play('caminar_izqA', true);
-                izqA = true;
-        }else{
+            gatoA.setVelocityX(-160);  // Mover a la izquierda
+            gatoA.play('caminar_izqA', true);  // Reproducir animación
+            izqB=true;
+        } else {
             gatoA.setVelocityX(0);  // Detener el movimiento horizontal
         }
+    
         if (keys.W.isDown) {
-                gatoA.setVelocityY(-160);
-                gatoA.anims.play('espaldasA', true);
-                arribaA = true;
+            gatoA.setVelocityY(-160);  // Mover hacia arriba
+            gatoA.play('espaldasA', true);  // Reproducir animación
+            arribaB = true;
         } else if (keys.S.isDown) {
-                gatoA.setVelocityY(160);
-                gatoA.anims.play('frenteA', true);
-                arribaA = false;
+            gatoA.setVelocityY(160);  // Mover hacia abajo
+            gatoA.play('frenteA', true);  // Reproducir animación
+            arribaB = false;
         } else {
-            gatoA.setVelocityY(0); 
+            gatoA.setVelocityY(0);  // Detener el movimiento vertical
         }
-    }else {
+    } else{
         gatoA.setVelocityX(0);
         gatoA.setVelocityY(0);
         gatoA.anims.stop();
@@ -589,16 +701,14 @@ update(time, delta) {
     //pesca
     if (keys.Q.isDown && !gatoAwait) {
         if (this.isInFishingZone(gatoA, pesca)) {
-            console.log('Está en la zona de pesca');
-            gatoA.anims.stop();
+            // Solo pesca si está en una zona permitida
             this.sonidoPesca.play();
             gatoAwait = true;
+    
             // Elegir la animación según la dirección
             if (izqA) {
-                console.log('Izquierda detectada, ejecutando animación pescar_izqA');
                 gatoA.play('pescar_izqA');
             } else {
-                console.log('Derecha detectada, ejecutando animación pescar_drchA');
                 gatoA.play('pescar_drchA');
             }
     
@@ -777,66 +887,12 @@ update(time, delta) {
             lanzado.play(animPezGlobo, true);
             this.explotarPezGlobo(lanzado);
         }
-
-        this.peces.children.iterate(pez => {
-            if (
-                pez &&
-                pez.texture.key === 'pezGlobo' &&
-                pez.tiempoExplosion &&
-                this.time.now >= pez.tiempoExplosion &&
-                !pez.explotado
-            ) {
-                pez.explotado = true;
-                pez.play('explotarPG', true);
-        
-                let framesAnim = this.anims.get('explotarPG').frames.length;
-                let frameRateAnim = this.anims.get('explotarPG').frameRate;
-                let duracion = (framesAnim / frameRateAnim) * 1000;
-        
-                this.time.delayedCall(duracion, () => {
-                    if (pez.active) {
-                        pez.destroy();
-                        this.sonidoExplosion.play();
-                    }
-                });
-        
-                let explosion = new Phaser.Math.Vector2(pez.x, pez.y);
-                let coordA = new Phaser.Math.Vector2(gatoA.x, gatoA.y);
-                let coordB = new Phaser.Math.Vector2(gatoB.x, gatoB.y);
-                let radio = 200;
-        
-                if (coordA.distance(explosion) <= radio) {
-                    puntosA -= 2;
-                    textoA.setText(" " + puntosA);
-                }
-        
-                if (coordB.distance(explosion) <= radio) {
-                    puntosB -= 2;
-                    textoB.setText(" " + puntosB);
-                }
-            }
-        });
-        
-    }
-
-
+    } 
+    
     //RESTRICCIONES 
     //arbustos
      // Restringir a gatoA
-    if (gatoA.x < arbusto.x) gatoA.x = arbusto.x;
-    if (gatoA.x > arbusto.x + arbusto.width) gatoA.x = arbusto.x + arbusto.width;
-    if (gatoA.y < arbusto.y) gatoA.y = arbusto.y;
-    if (gatoA.y > arbusto.y + arbusto.height) gatoA.y = arbusto.y + arbusto.height;
-
-    // Restringir a gatoB
-    if (gatoB.x < arbusto.x) gatoB.x = arbusto.x;
-    if (gatoB.x > arbusto.x + arbusto.width) gatoB.x = arbusto.x + arbusto.width;
-    if (gatoB.y < arbusto.y) gatoB.y = arbusto.y;
-    if (gatoB.y > arbusto.y + arbusto.height) gatoB.y = arbusto.y + arbusto.height;
-
-
-    
-    
+     
 }
 
 moverPezParabola(pez, destinoX, destinoY, duracion = 2000) {
@@ -1015,7 +1071,6 @@ destruirPeces(gato, pez) {
     pez.destroy();  // El pez se destruye cuando uno de los jugadores lo toca
 }
 
-
 // Método para explotar el pez globo
 explotarPezGlobo(pez) {
     if (!pez.active) {
@@ -1023,65 +1078,81 @@ explotarPezGlobo(pez) {
         return;
     }
 
-    const tiempo = 4000;
-    pez.tiempoExplosion = this.time.now + tiempo; // Guardamos el momento exacto en que debe explotar
+    let tiempo = 7000; // Duración de la animación de explosión en milisegundos
 
+    // Guardamos las posiciones iniciales de los gatos al momento de aparecer el pez
     let coordA = new Phaser.Math.Vector2(gatoA.x, gatoA.y);
     let coordB = new Phaser.Math.Vector2(gatoB.x, gatoB.y);
+    
+    // Creamos un objeto para almacenar las posiciones dinámicas de los gatos
     let posicionesGatos = { gatoA: coordA, gatoB: coordB };
 
+    // Función que actualiza las posiciones de los gatos en tiempo real
     const actualizarPosiciones = () => {
         posicionesGatos.gatoA.set(gatoA.x, gatoA.y);
         posicionesGatos.gatoB.set(gatoB.x, gatoB.y);
     };
 
+    // Establecemos un temporizador que actualiza las posiciones de los gatos cada frame
     let actualizarPosicionesEvent = this.time.addEvent({
-        delay: 100,  // Actualizamos las posiciones cada 100ms
+        delay: 100,  // Cada 100ms actualizamos las posiciones
         callback: actualizarPosiciones,
         loop: true
     });
 
+    // Establecemos el retraso de 7 segundos para la animación de la explosión
     this.time.delayedCall(tiempo, () => {
+        // Detenemos solo el evento de actualización de posiciones (no todos los eventos)
         actualizarPosicionesEvent.remove();
 
-        if (!pez.active) {
+        // Verificamos si el pez sigue activo antes de proceder
+        if (!pez || !pez.active) {
             console.log('El pez no está disponible o ya ha sido destruido.');
             return;
         }
 
+        // Iniciar la animación de explosión solo si el pez está activo
         pez.play('explotarPG', true);
 
+        // Calculamos la duración de la animación de explosión
         let framesAnim = this.anims.get('explotarPG').frames.length;
         let frameRateAnim = this.anims.get('explotarPG').frameRate;
-        let duracion = (framesAnim / frameRateAnim) * 1000;
+        let duracion = (framesAnim / frameRateAnim) * 1000; // Duración en milisegundos
 
+        // Configuramos el retraso para destruir el pez después de que termine la animación
         this.time.delayedCall(duracion, () => {
-            if (pez.active) {
-                pez.destroy();
+            if (pez.active) {  // Asegurarnos de que el pez esté activo antes de destruirlo
+                pez.destroy();  // Destruir el pez cuando la animación haya terminado
                 this.sonidoExplosion.play();
                 console.log("Pez destruido por explosión");
             }
         });
 
+        // Posición de la explosión
         let explosion = new Phaser.Math.Vector2(pez.x, pez.y);
+
+        // Usamos las posiciones más actualizadas de los gatos
         let coordAActualizada = posicionesGatos.gatoA;
         let coordBActualizada = posicionesGatos.gatoB;
-        let radioExplosion = 200;
 
+        // Define el radio de la explosión
+        let radioExplosion = 200; // En píxeles
+
+        // Comprobar si Gato A está dentro del rango de la explosión
         if (coordAActualizada.distance(explosion) <= radioExplosion) {
             puntosA = puntosA - 2;
             textoA.setText("Puntos: " + puntosA);
             console.log("Gato A recibió daño. Puntos: " + puntosA);
         }
 
+        // Comprobar si Gato B está dentro del rango de la explosión
         if (coordBActualizada.distance(explosion) <= radioExplosion) {
             puntosB = puntosB - 2;
             textoB.setText("Puntos: " + puntosB);
             console.log("Gato B recibió daño. Puntos: " + puntosB);
         }
-    });
+    }); // Retraso de 7 segundos antes de ejecutar la explosión
 }
-
 
 
 updateTimer() {
@@ -1097,8 +1168,8 @@ updateTimer() {
 }
 
 timeUp() {
-    
     this.scene.start("ResultScreen"); // Cambiar a la escena ResultScreen
 }
+
 
 } 

@@ -24,7 +24,7 @@ class Creditos extends Phaser.Scene {
         const nombres = [
             'Grupo 10: Pawtastic Studios',
             'Isabel Sánchez Benito',
-            'Jose Ignacio González Vicente',
+            'Jose Ignacio González Vicente'
         ];
 
         // Estilo de texto
