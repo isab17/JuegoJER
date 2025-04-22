@@ -135,7 +135,7 @@ El segundo escenario está orientado en una mesa en la que se ha vertido agua. L
 ### 2.5. Escenario 3 – Vórtice
 El último escenario está orientado en un vórtice, con varias islas alrededor y un acantilado. En este caso los peces nadan siguiendo el giro del vórtice y salen de él para caer en los puentes colgantes que hay entre las islas y en las islas mismas.
 
-![Escenario 3 - Fondo Blanco](https://github.com/user-attachments/assets/c907e746-bbf2-475d-a274-5f55ad04c18b)
+![Escenario 3 - Fondo Blanco](src/main/resources/static/assets/Escenario3/Final.png)
 
 
 ## 3. Personajes – Ítems
@@ -222,10 +222,6 @@ Los peces peligrosos (como las pirañas y los peces globo) desaparecen de la pan
 Pantalla de inicio con un botón de jugar, tutorial, chat, créditos y otro para salir al escritorio. Además, incluye un indicador de estado de conexión.
 ![Menú Inicio](https://github.com/user-attachments/assets/a7f46d32-f54e-40fe-a49a-0f28eed24164)
 
-Pantalla de selección de juego local / online
-
-<img src="https://github.com/user-attachments/assets/532064f8-88f3-4488-8655-ed6d2500a7b8" alt="Local-Online" width="1200" height="720">
-
 Pantalla de chat con una interfaz y un botón de enviar mensajes. Tiene persistencia y permite ver el nombre del usuario que ha escrito.
 ![Chat](https://github.com/user-attachments/assets/bec528c1-6871-4ab9-824f-85e0427edb5b)
 
@@ -233,7 +229,7 @@ Pantalla de pausa con opciones para ir a la pantalla de inicio o la pantalla de 
 ![pausa_montada](https://github.com/user-attachments/assets/dc81782e-7b6e-494b-9d7c-f924c6857d0b)
 
 Pantalla de créditos con los autores del juego y un botón de regreso a la pantalla de inicio.
-![Captura de pantalla 2024-11-24 190111](https://github.com/user-attachments/assets/a8f9b407-3e63-40d8-ba8b-d5b88d5d6fa2)
+![Captura de pantalla 2024-11-24 190111](GDD/Pantallas/Créditos.png)
 
 Interfaz de inventario con un hueco para cada almacenar peces.
 
@@ -244,7 +240,7 @@ Interfaz de tiempo con un contador de 90 segundos.
 ![reloj](https://github.com/user-attachments/assets/9b0e35b4-170b-4abc-b5bf-2bb22d500573)
 
 Pantalla de selección de escenario con 3 posibles opciones desbloqueables con el tiempo.
-![Escenarios](https://github.com/user-attachments/assets/91c29fd6-2344-4539-aa83-9f2c8752f722)
+![Escenarios](GDD/Pantallas/Mapas.png)
 
 Pantalla de inicio de sesión y de registro (Intercambiables) para jugar online en el servidor. Además, de dos pantallas de eliminar usuario y cambio de contraseña, también intercambiables y accesibles.
 ![Inicio de Sesión](GDD/Pantallas/InicioSesion.png)
