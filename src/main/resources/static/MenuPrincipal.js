@@ -12,9 +12,14 @@ class MenuPrincipal extends Phaser.Scene {
         this.load.image("fondo", "assets/Pantalla_inicio/fondo_inicio.png"); // Fondo del menú
 
         // Botones con tres imágenes para cada uno: normal, seleccionado y pulsado
-        this.load.image("botonInicioNormal", "assets/Pantalla_inicio/jugar/Normal.png");
-        this.load.image("botonInicioEncima", "assets/Pantalla_inicio/jugar/Seleccionado.png");
-        this.load.image("botonInicioPulsado", "assets/Pantalla_inicio/jugar/pulsado.png");
+        this.load.image("Local_normal","assets/Pantalla_inicio/Local/normal.png")
+        this.load.image("Local_seleccionado","assets/Pantalla_inicio/Local/seleccionado.png")
+        this.load.image("Local_presionado","assets/Pantalla_inicio/Local/presionado.png")
+
+        this.load.image("Online_normal","assets/Pantalla_inicio/Online/normal.png")
+        this.load.image("Online_seleccionado","assets/Pantalla_inicio/Online/seleccionado.png")
+        this.load.image("Online_presionado","assets/Pantalla_inicio/Online/presionado.png")
+        this.load.image("Online_bloqueado","assets/Pantalla_inicio/Online/bloqueado.png")
 
         this.load.image("botonTutorialNormal", "assets/Pantalla_inicio/Tutorial/Normal.png");
         this.load.image("botonTutorialEncima", "assets/Pantalla_inicio/Tutorial/Seleccionado.png");
@@ -39,42 +44,45 @@ class MenuPrincipal extends Phaser.Scene {
 
     // Función create para inicializar objetos una vez que se han cargado los recursos
     create() {
-        this.createUI();
+        // Fondo del menú
+        const background = this.add.image(config.width / 2, config.height / 2, 'fondo');
+        background.setScale(config.width / background.width, config.height / background.height); // Escalar fondo
+
+        //Musica
         this.sonido = this.sound.add("Sonido", { loop: true, volume: 0.8 });
         this.sonido.play();
-
-        this.time.addEvent({ delay: 5000, callback: this.keepAlive, callbackScope: this, loop: true });
-        this.time.addEvent({ delay: 5000, callback: this.updateConnectedUsers, callbackScope: this, loop: true });
-        this.time.addEvent({ delay: 5000, callback: this.checkServerStatus, callbackScope: this, loop: true });
-
-        window.addEventListener("beforeunload", (event) => {
-            event.preventDefault();
-            setTimeout(() => {
-                if (event.defaultPrevented) this.disconnectedUser();
-            }, 0);
-        });
-    }
-
-    createUI() {
-        const background = this.add.image(config.width / 2, config.height / 2, 'fondo');
-        background.setScale(config.width / background.width, config.height / background.height);
-
-        this.connectedUsersText = this.add.text(20, 20, "Usuarios conectados:", { font: "16px Arial", fill: "#ffffff" });
-        this.botonServer = this.add.image(config.width - 50, 50, "botonDesconectado").setScale(0.05);
-
         const sonidoBoton = this.sound.add("sonidoBoton", { loop: false, volume: 0.5 });
 
-        const botonInicio = this.add.image(config.width / 2, 300, 'botonInicioNormal').setInteractive().setScale(0.5)
-            .on('pointerover', () => botonInicio.setTexture('botonInicioEncima'))
-            .on('pointerout', () => botonInicio.setTexture('botonInicioNormal'))
-            .on('pointerdown', () => botonInicio.setTexture('botonInicioPulsado'))
+        this.botonServer = this.add.image(config.width - 50, 50, "botonDesconectado").setScale(0.05);
+        // Crear texto para mostrar usuarios conectados
+        this.connectedUsersText = this.add.text(10, 10, "Usuarios conectados:", {
+            font: "16px Arial",
+            fill: "#ffffff",
+        });
+        this.connectedUsersText.setPosition(20, 20);
+        const botonLocal = this.add.image(config.width / 2, 250, 'Local_normal').setInteractive().setScale(0.6)
+            .on('pointerover', () => botonLocal.setTexture('Local_seleccionado'))
+            .on('pointerout', () => botonLocal.setTexture('Local_normal'))
+            .on('pointerdown', () => botonLocal.setTexture('Local_presionado'))
             .on('pointerup', () => {
-                botonInicio.setTexture('botonInicioNormal');
+                botonLocal.setTexture('Local_normal');
                 sonidoBoton.play();
-                this.scene.start('MapaOnline');
+                this.scene.start('Mapas');
             });
+        this.botonOnline = this.add.image(config.width / 2, 350, 'Online_normal').setInteractive().setScale(0.6)
+            .on('pointerover', () => this.botonOnline.setTexture('Online_seleccionado'))
+            .on('pointerout', () => this.botonOnline.setTexture('Online_normal'))
+            .on('pointerdown', () => this.botonOnline.setTexture('Online_presionado'))
+            .on('pointerup', () => {
+                if (this.serverActive) {
+                    this.botonOnline.setTexture('Online_normal');
+                    sonidoBoton.play();
+                    this.scene.start('Partidas');
+                }
+            });
+        
 
-        const botonTutorial = this.add.image(config.width / 2, 430, 'botonTutorialNormal').setInteractive().setScale(0.6)
+        const botonTutorial = this.add.image(config.width / 2, 450, 'botonTutorialNormal').setInteractive().setScale(0.6)
             .on('pointerover', () => botonTutorial.setTexture('botonTutorialEncima'))
             .on('pointerout', () => botonTutorial.setTexture('botonTutorialNormal'))
             .on('pointerdown', () => botonTutorial.setTexture('botonTutorialPulsado'))
@@ -84,7 +92,7 @@ class MenuPrincipal extends Phaser.Scene {
                 this.scene.start('TutorialScene1');
             });
 
-        const botonCreditos = this.add.image(config.width / 2, 530, 'botonCreditosNormal').setInteractive().setScale(0.6)
+        const botonCreditos = this.add.image(config.width / 2, 550, 'botonCreditosNormal').setInteractive().setScale(0.6)
             .on('pointerover', () => botonCreditos.setTexture('botonCreditosEncima'))
             .on('pointerout', () => botonCreditos.setTexture('botonCreditosNormal'))
             .on('pointerdown', () => botonCreditos.setTexture('botonCreditosPulsado'))
@@ -94,7 +102,7 @@ class MenuPrincipal extends Phaser.Scene {
                 this.scene.start('creditos');
             });
 
-        const botonSalir = this.add.image(config.width / 2, 630, 'botonSalirNormal').setInteractive().setScale(0.6)
+        const botonSalir = this.add.image(config.width / 2, 650, 'botonSalirNormal').setInteractive().setScale(0.6)
             .on('pointerover', () => botonSalir.setTexture('botonSalirEncima'))
             .on('pointerout', () => botonSalir.setTexture('botonSalirNormal'))
             .on('pointerdown', () => botonSalir.setTexture('botonSalirPulsado'))
@@ -109,39 +117,91 @@ class MenuPrincipal extends Phaser.Scene {
                 sonidoBoton.play();
                 this.scene.start('Chat', { escenaPrevia: this.scene.key });
             });
+
+        this.checkServerStatus();
+
+        //Registrar actividad del usuario
+        this.time.addEvent({
+            delay:5000,
+            callback:this.keepAlive,
+            callbackScope:this,
+                loop: true
+        })
+        // Consultar usuarios conectados
+        this.time.addEvent({
+            delay: 5000,
+            callback: this.updateConnectedUsers,
+            callbackScope: this,
+            loop: true,
+        });
+
+        // Verificar estado del servidor
+        this.time.addEvent({
+            delay: 5000,
+            callback: this.checkServerStatus,
+            callbackScope: this,
+            loop: true,
+        });
+
+        // Listener para detener el bucle cuando la pestaña no está visible
+        window.addEventListener("beforeunload", (event) => {
+            // Mostrar un mensaje genérico de confirmación
+            event.preventDefault(); // Esto activa el mensaje de confirmación del navegador
+        
+            // Registrar un evento para capturar la respuesta del usuario
+            setTimeout(() => {
+                if (event.defaultPrevented) {
+                    // Si el usuario decide cerrar la pestaña
+                    this.disconnectedUser();
+                }
+            }, 0);
+        });
     }
 
-    update(time, delta) {}
-
-    async keepAlive() {
-        fetch('/api/users/seen', {
+    async keepAlive(){
+        fetch('/api/users/seen',{
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: this.username })
-        }).catch(error => console.error('Error:', error));
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username:this.username
+            })
+        })
+        .then(response=>{
+            if(!response.ok){
+                throw new Error('Network response was not ok');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 
-    async disconnectedUser() {
-        fetch('/api/users/disconnect', {
+    async disconnectedUser(){
+        fetch('/api/users/disconnect',{
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: this.username })
-        }).catch(error => console.error('Error:', error));
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username:this.username })
+        })
+        .then(response=>{
+            if(!response.ok){
+                throw new Error('Network response was not ok');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
-
+    
     async updateConnectedUsers() {
         const threshold = Date.now() - this.threshold;
+        console.log(threshold.toString());
         fetch(`/api/users/connected-since/${threshold}`)
             .then(response => response.json())
             .then(data => {
                 data.shift();
                 this.connectedUsers = data;
-                if (this.connectedUsersText && this.connectedUsersText.setText) {
-                    if (this.connectedUsersText?.setText) {
-                        this.connectedUsersText.setText("Usuarios conectados:\n" + this.connectedUsers.join("\n"));
-                    }
-                    
-                }
+                console.log(data);
+                this.connectedUsersText.setText("Usuarios conectados:\n" + this.connectedUsers.join("\n"));
             })
             .catch(error => console.error('Error al obtener usuarios conectados:', error));
     }
@@ -149,22 +209,23 @@ class MenuPrincipal extends Phaser.Scene {
     async checkServerStatus() {
         fetch('/api/users/status')
             .then(response => {
-                if (!response.ok) throw new Error('El servidor no está activo');
+                if (!response.ok) {
+                    throw new Error('El servidor no está activo');
+                }
                 return response.text();
             })
             .then(status => {
-                this.serverActive = status === "active";
-                if (this.botonServer?.setTexture) {
-                    this.botonServer.setTexture(this.serverActive ? "botonConectado" : "botonDesconectado");
+                if (status === "active") {
+                    this.serverActive = true;
+                    this.botonServer.setTexture("botonConectado");
                 }
             })
             .catch(error => {
                 console.error('Error al verificar el estado del servidor:', error);
                 this.serverActive = false;
-                if (this.botonServer?.setTexture) {
-                    this.botonServer.setTexture("botonDesconectado");
-                }
+                this.botonServer.setTexture("botonDesconectado");
+                this.botonOnline.setTexture("Online_bloqueado");
+                this.botonOnline.disableInteractive();
             });
-            
     }
 }

@@ -31,7 +31,7 @@ let gatoA, gatoB;
 
 let cursor,keys,izqA,izqB,arribaA,arribaB,peces,gatoAwait,gatoBwait, puntosA=0, puntosB=0, textoA, 
 textoB,arbusto,pez,zonasProhibidas,tierra,pesca,mapa, abiertoA, abiertoB, pezGloboA, 
-pezGloboB,agua,mapaElegido, gameID, nombreA, nombreB,botonServer;
+pezGloboB,agua,mapaElegido, gameID, nombreA, nombreB,botonServer,botonOnline;
 
 
 

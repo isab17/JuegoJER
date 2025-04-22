@@ -78,8 +78,6 @@ class MapaOnline extends Phaser.Scene {
         fondo.setScale(
             Math.max(this.scale.width / fondo.width, this.scale.height / fondo.height)
         );
-
-        const texto = this.add.text(390, 50, "TU PERSONAJE ES:", { font: "30px Arial Black" });
         this.botonServer = this.add.image(config.width - 70, 50, "botonDesconectado").setScale(0.04);
 
 
