@@ -1,11 +1,6 @@
-
-class MapaOnline extends Phaser.Scene {
+class MapaSalaPrivada extends Phaser.Scene {
     constructor() {
-        super({ key: "MapaOnline" });
-
-        this.socket = null;
-        this.socketListo = false;
-
+        super({ key: "mapaSalaPriv" });
     }
 
     preload() {
@@ -39,7 +34,6 @@ class MapaOnline extends Phaser.Scene {
 
     create() {
         
-<<<<<<< Updated upstream
         // Crear WebSocket solo si no existe ya
         if (!this.registry.has("socket")) {
         const socket = new WebSocket("ws://localhost:8080/ws");
@@ -48,18 +42,12 @@ class MapaOnline extends Phaser.Scene {
         this.setupWebSocket();
 
         }
-=======
-        this.socket = this.registry.get("socket");
-        this.setupWebSocket();
-
->>>>>>> Stashed changes
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
             Math.max(this.scale.width / fondo.width, this.scale.height / fondo.height)
         );
-
-        const texto = this.add.text(390, 50, "TU PERSONAJE ES:", { font: "30px Arial Black" });
+        const texto = this.add.text(390, 50, "SELECCIONA UN MAPA:", { font: "30px Arial Black" });
         this.botonServer = this.add.image(config.width - 70, 50, "botonDesconectado").setScale(0.04);
 
 
@@ -87,10 +75,6 @@ class MapaOnline extends Phaser.Scene {
     setupWebSocket() {
         this.socket = this.registry.get("socket");
     
-        if (this.socket.readyState === WebSocket.OPEN) {
-            this.socketListo = true;
-        }
-    
         this.socket.onopen = () => {
             console.log('✅ Conectado al servidor WebSocket');
             this.socketListo = true;
@@ -99,46 +83,38 @@ class MapaOnline extends Phaser.Scene {
         this.socket.onmessage = (event) => {
             const type = event.data.charAt(0);
             const data = event.data.length > 1 ? JSON.parse(event.data.substring(1)) : null;
-    
+        
             switch (type) {
-                case 'm':
+                case 'm': // mapa confirmado por servidor
                     console.log("🗺️ Recibido mensaje 'm':", data);
-                    if (data.start) {
-                        this.mapaConfirmado = data.mapa;
-                    } else {
-                        console.log("⏳ Esperando otro jugador...");
-                    }
+                    this.mapaConfirmado = data?.mapa;
                     break;
-
-                case 'i':
+        
+                case 'i': // INIT del juego
                     console.log("✅ Recibido INIT:", data);
                     if (!data?.id) {
                         console.error("❌ INIT sin ID de jugador válido:", data);
                         return;
                     }
-
+                
                     this.registry.set('jugadorId', data.id);
                     this.registry.set('socket', this.socket);
-                    this.registry.set('initData', data);
-
+                    this.registry.set('initData', data); 
+                
                     if (this.mapaConfirmado) {
-                        console.log("🚀 Iniciando escena GameOnline1");
                         this.scene.start('GameOnline1');
-                    } else {
-                        console.warn("⚠️ INIT recibido pero mapa no confirmado aún.");
                     }
                     break;
-
-
+                
             }
         };
+        
+        
     
         this.socket.onclose = () => {
             console.warn("⚠️ Conexión cerrada desde MapaOnline");
         };
     }
-    
-
     
     
     
@@ -187,13 +163,10 @@ class MapaOnline extends Phaser.Scene {
             return;
         }
     
-        console.log("📤 Enviando selección de mapa: " + id);
         socket.send("m" + JSON.stringify({ mapa: id }));
     
         this.add.text(390, 650, "Esperando al otro jugador...", { font: "30px Arial Black" });
     }
-    
-    
     
     
     async checkServerStatus() {
