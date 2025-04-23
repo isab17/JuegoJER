@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /**
  * Message types used for WebSocket communication.
  * These short codes optimizan el tamaño del mensaje para velocidad.
@@ -24,6 +25,8 @@ const MSG_TYPES = ({
 
 });
 
+=======
+>>>>>>> Stashed changes
 class MapaOnline extends Phaser.Scene {
     constructor() {
         super({ key: "MapaOnline" });
@@ -65,12 +68,18 @@ class MapaOnline extends Phaser.Scene {
 
     create() {
         
+<<<<<<< Updated upstream
         // Crear WebSocket solo si no existe ya
         if (!this.registry.has("socket")) {
         const socket = new WebSocket("ws://localhost:8080/ws");
         this.registry.set("socket", socket);
         this.setupWebSocket();
         }
+=======
+        this.socket = this.registry.get("socket");
+        this.setupWebSocket();
+
+>>>>>>> Stashed changes
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
@@ -174,6 +183,7 @@ class MapaOnline extends Phaser.Scene {
         const normal = `${nombre}_normal`;
         const seleccionado = `${nombre}_seleccionado`;
         const presionado = `${nombre}_presionado`;
+
     
         const btn = this.add.image(x, y, normal).setInteractive().setScale(escala);
         btn.setInteractive({ useHandCursor: true }).disableInteractive();
