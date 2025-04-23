@@ -1,39 +1,9 @@
-<<<<<<< Updated upstream
-/**
- * Message types used for WebSocket communication.
- * These short codes optimizan el tamaño del mensaje para velocidad.
- * Usar estos tipos en cliente y servidor asegura consistencia.
- *
- * @enum {string}
- */
-const MSG_TYPES = ({
-    INIT:       'i', // Inicializa el estado del juego
-    POS:        'p', // Actualiza posición y animación del jugador
-    COLLECT:    'c', // Evento de captura de pez
-    TIME:       't', // Actualización del temporizador
-    OVER:       'o', // Fin del juego (game over)
-    STATE:      's', // Estado completo sincronizado (respaldo)
-    THROW:      'f', // Lanzamiento de pez globo
-    DISCONNECT: 'u', // Jugador desconectado
-    RECONNECT:  'r', // Jugador reconectado
-    FISH_SPAWN: 'g',  // Peces generados por pesca
-    EXPLODE_PEZGLOBO: 'x', //Explosion pez globo
-    KEEP_ALIVE: 'k', //Mantener viva la sesion
-    MAPASELECCIONADO: 'm',
-    PAUSE_SYNC: 'z', //Pausar juego
-    RESUME_REQUEST: 'v' // Solicitud de reanudar el juego
-
-});
-
-=======
->>>>>>> Stashed changes
 class MapaOnline extends Phaser.Scene {
     constructor() {
         super({ key: "MapaOnline" });
 
-        // === WebSocket ===
-        /** @type {WebSocket|null} */
         this.socket = null;
+        this.socketListo = false;
 
     }
 
@@ -68,18 +38,9 @@ class MapaOnline extends Phaser.Scene {
 
     create() {
         
-<<<<<<< Updated upstream
-        // Crear WebSocket solo si no existe ya
-        if (!this.registry.has("socket")) {
-        const socket = new WebSocket("ws://localhost:8080/ws");
-        this.registry.set("socket", socket);
-        this.setupWebSocket();
-        }
-=======
         this.socket = this.registry.get("socket");
         this.setupWebSocket();
 
->>>>>>> Stashed changes
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
@@ -136,6 +97,10 @@ class MapaOnline extends Phaser.Scene {
     setupWebSocket() {
         this.socket = this.registry.get("socket");
     
+        if (this.socket.readyState === WebSocket.OPEN) {
+            this.socketListo = true;
+        }
+    
         this.socket.onopen = () => {
             console.log('✅ Conectado al servidor WebSocket');
             this.socketListo = true;
@@ -144,46 +109,49 @@ class MapaOnline extends Phaser.Scene {
         this.socket.onmessage = (event) => {
             const type = event.data.charAt(0);
             const data = event.data.length > 1 ? JSON.parse(event.data.substring(1)) : null;
-        
+    
             switch (type) {
-                case 'm': // mapa confirmado por servidor
+                case 'm':
                     console.log("🗺️ Recibido mensaje 'm':", data);
-                    this.mapaConfirmado = data?.mapa;
+                    if (data.start) {
+                        this.mapaConfirmado = data.mapa;
+                    } else {
+                        console.log("⏳ Esperando otro jugador...");
+                    }
                     break;
-        
-                case 'i': // INIT del juego
+
+                case 'i':
                     console.log("✅ Recibido INIT:", data);
                     if (!data?.id) {
                         console.error("❌ INIT sin ID de jugador válido:", data);
                         return;
                     }
-                
+
                     this.registry.set('jugadorId', data.id);
                     this.registry.set('socket', this.socket);
-                    this.registry.set('initData', data); 
-                
+                    this.registry.set('initData', data);
+
                     if (this.mapaConfirmado) {
+                        console.log("🚀 Iniciando escena GameOnline1");
                         this.scene.start('GameOnline1');
+                    } else {
+                        console.warn("⚠️ INIT recibido pero mapa no confirmado aún.");
                     }
                     break;
-                
+
+
             }
         };
-        
-        
     
         this.socket.onclose = () => {
             console.warn("⚠️ Conexión cerrada desde MapaOnline");
         };
     }
     
-    
-    
     crearBotonMapa(nombre, id, x, y, rotacion = 0, escala = 0.7) {
         const normal = `${nombre}_normal`;
         const seleccionado = `${nombre}_seleccionado`;
         const presionado = `${nombre}_presionado`;
-
     
         const btn = this.add.image(x, y, normal).setInteractive().setScale(escala);
         btn.setInteractive({ useHandCursor: true }).disableInteractive();
@@ -225,10 +193,13 @@ class MapaOnline extends Phaser.Scene {
             return;
         }
     
+        console.log("📤 Enviando selección de mapa: " + id);
         socket.send("m" + JSON.stringify({ mapa: id }));
     
         this.add.text(390, 650, "Esperando al otro jugador...", { font: "30px Arial Black" });
     }
+    
+    
     
     
     async checkServerStatus() {

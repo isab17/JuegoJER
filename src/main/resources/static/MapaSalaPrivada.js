@@ -1,29 +1,3 @@
-/**
- * Message types used for WebSocket communication.
- * These short codes optimizan el tamaño del mensaje para velocidad.
- * Usar estos tipos en cliente y servidor asegura consistencia.
- *
- * @enum {string}
- */
-const MSG_TYPES = ({
-    INIT:       'i', // Inicializa el estado del juego
-    POS:        'p', // Actualiza posición y animación del jugador
-    COLLECT:    'c', // Evento de captura de pez
-    TIME:       't', // Actualización del temporizador
-    OVER:       'o', // Fin del juego (game over)
-    STATE:      's', // Estado completo sincronizado (respaldo)
-    THROW:      'f', // Lanzamiento de pez globo
-    DISCONNECT: 'u', // Jugador desconectado
-    RECONNECT:  'r', // Jugador reconectado
-    FISH_SPAWN: 'g',  // Peces generados por pesca
-    EXPLODE_PEZGLOBO: 'x', //Explosion pez globo
-    KEEP_ALIVE: 'k', //Mantener viva la sesion
-    MAPASELECCIONADO: 'm',
-    PAUSE_SYNC: 'z', //Pausar juego
-    RESUME_REQUEST: 'v' // Solicitud de reanudar el juego
-
-});
-
 class MapaSalaPrivada extends Phaser.Scene {
     constructor() {
         super({ key: "mapaSalaPriv" });

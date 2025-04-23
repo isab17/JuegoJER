@@ -14,7 +14,8 @@ import java.util.concurrent.*;
 public class WebsocketHandler extends TextWebSocketHandler {
     private final Map<String, Player> players = new ConcurrentHashMap<>();  //Crear jugadores
     private final Map<String, Game> games = new ConcurrentHashMap<>(); //Crear sesiones de juegos
-    private final Queue<WebSocketSession> waitingPlayers = new ConcurrentLinkedQueue<>();  //Espera de jugadores
+    private final Map<String, Sala> salasPrivadas = new ConcurrentHashMap<>();
+    private final Map<Integer, Queue<WebSocketSession>> waitingByMap = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper(); //Leer y escribir JSON
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1); //Ejecutar tareas programadas o periódicas
 
@@ -90,38 +91,16 @@ public class WebsocketHandler extends TextWebSocketHandler {
 
     }
 
-    @Override
-    public void afterConnectionEstablished(WebSocketSession session) {
-        waitingPlayers.add(session);
-        players.put(session.getId(), new Player(session));
-
-        synchronized (this) {
-            checkAndCreateGame();
-        }
+    private static class Sala {
+        Player jugador1;
+        Player jugador2;
+        boolean iniciada = false;
+        Game game; // Se crea cuando están los dos
     }
 
-    private synchronized void checkAndCreateGame() {
-        if (waitingPlayers.size() >= 2) {
-            WebSocketSession s1 = waitingPlayers.poll();
-            WebSocketSession s2 = waitingPlayers.poll();
-
-            if (s1 != null && s2 != null) {
-                Player player1 = players.get(s1.getId());
-                Player player2 = players.get(s2.getId());
-
-                //Inicializar los id y las posiciones
-                player1.playerId = 1;
-                player2.playerId = 2;
-                player1.x = 200; 
-                player1.y = 620;
-                player2.x = 1090; 
-                player2.y = 160;
-
-                Game game = new Game(player1, player2);
-                games.put(s1.getId(), game);
-                games.put(s2.getId(), game);
-            }
-        }
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) {
+        players.put(session.getId(), new Player(session));
     }
 
     private void startGame(Game game) {
@@ -225,15 +204,20 @@ public class WebsocketHandler extends TextWebSocketHandler {
     @Override
 protected void handleTextMessage(WebSocketSession session, TextMessage message) {
     try {
-        Game game = games.get(session.getId());
-        if (game == null) return;
 
         Player currentPlayer = players.get(session.getId());
-        Player otherPlayer = (game.player1 == currentPlayer) ? game.player2 : game.player1;
+        Game game = games.get(session.getId());
 
         String payload = message.getPayload();
         char type = payload.charAt(0);
         String data = payload.length() > 1 ? payload.substring(1) : "";
+
+        // Permitir mensajes incluso sin game (por ejemplo, 'm')
+        if (game == null && type != 'm') return;
+
+        Player otherPlayer = (game != null) ? ((game.player1 == currentPlayer) ? game.player2 : game.player1) : null;
+
+        System.out.println("📩 Mensaje recibido: " + payload);
 
         switch (type) {
             case 'p': { // POS - posición con animación
@@ -391,30 +375,53 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
                 
             }
 
-            case 'm': { // Mapa seleccionado
+            case 'm': {
                 Map<String, Object> mapData = mapper.readValue(data, Map.class);
                 int mapa = (int) mapData.get("mapa");
+                currentPlayer.map = mapa;
             
-                if (currentPlayer.playerId == 1) game.player1.map = mapa;
-                if (currentPlayer.playerId == 2) game.player2.map = mapa;
+                // Añadir jugador a cola del mapa
+                waitingByMap.putIfAbsent(mapa, new ConcurrentLinkedQueue<>());
+                Queue<WebSocketSession> cola = waitingByMap.get(mapa);
+                cola.add(session);
             
-                // Iniciar solo si ambos han seleccionado el mismo mapa
-                if (game.player1.map == game.player2.map && game.player1.map != 0) {
-                    sendToPlayer(game.player1, "m", Map.of("start", true, "mapa", mapa));
-                    sendToPlayer(game.player2, "m", Map.of("start", true, "mapa", mapa));
-                    
-                    startGame(game); // Primero manda el INIT ("i")
-                    scheduler.schedule(() -> {
-                        sendToPlayer(game.player1, "m", Map.of("start", true, "mapa", mapa));
-                        sendToPlayer(game.player2, "m", Map.of("start", true, "mapa", mapa));
-                    }, 300, TimeUnit.MILLISECONDS); // Espera un poco para que llegue primero el "i"
+                System.out.println("📨 Jugador " + session.getId() + " seleccionó mapa " + mapa);
+                System.out.println("🧾 Tamaño de cola para mapa " + mapa + ": " + cola.size());
+            
+                synchronized (cola) {
+                    if (cola.size() >= 2) {
+                        WebSocketSession s1 = cola.poll();
+                        WebSocketSession s2 = cola.poll();
+            
+                        if (s1 == null || s2 == null) return;
+            
+                        Player p1 = players.get(s1.getId());
+                        Player p2 = players.get(s2.getId());
+            
+                        p1.playerId = 1;
+                        p2.playerId = 2;
+                        p1.x = 200; p1.y = 620;
+                        p2.x = 1090; p2.y = 160;
+            
+                        Game newGame = new Game(p1, p2);
+                        games.put(s1.getId(), newGame);
+                        games.put(s2.getId(), newGame);
+            
+                        sendToPlayer(p1, "m", Map.of("start", true, "mapa", mapa));
+                        sendToPlayer(p2, "m", Map.of("start", true, "mapa", mapa));
+            
+                        System.out.println("🎮 Partida creada para mapa " + mapa + " entre " + s1.getId() + " y " + s2.getId());
+            
+                        startGame(newGame);
+                    } else {
+                        sendToPlayer(currentPlayer, "m", Map.of("start", false, "mapa", mapa));
+                    }
 
-                    
+                    System.out.println("📩 Mensaje recibido: " + message.getPayload());
+
                 }
                 break;
             }
-            
-            
             
             case 'z': { // PAUSE_SYNC
                 try {
@@ -478,7 +485,6 @@ public void afterConnectionClosed(WebSocketSession session, CloseStatus status) 
     System.out.println("🔌 Conexión cerrada: " + session.getId());
 
     Player currentPlayer = players.remove(session.getId());
-    waitingPlayers.remove(session);
 
     Game game = games.remove(session.getId());
     if (game != null) {
@@ -575,6 +581,5 @@ private void generarPecesIniciales(Game game) {
     }
 
     game.pecesIniciales = peces;
-}
-
+    }
 }
