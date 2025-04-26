@@ -1,6 +1,6 @@
-class PauseMenuOnline extends Phaser.Scene {
+class PauseLocalMenu extends Phaser.Scene {
     constructor() {
-        super('PauseMenuOnline');
+        super('PauseLocalMenu');
     }
 
     init(data) {
@@ -71,16 +71,11 @@ class PauseMenuOnline extends Phaser.Scene {
         
         botonVolver.on('pointerup', () => {
             botonVolver.setTexture('Boton_volver_normal');
-            sonidoBoton.play();
-        
-            const jugadorId = this.registry.get('jugadorId');
-            if (jugadorId) {
-                this.registry.set('yoHeDadoAVolver', true);
-                this.registry.get('socket').send('v' + jugadorId); // ← ENVÍA SOLO EL ID
+            if (this.escenaPrevia) {
+                this.scene.resume(this.escenaPrevia);
             }
-
+            this.scene.stop(); // Detener la escena PauseMenu para evitar conflictos
         });
-        
         
     }
 }

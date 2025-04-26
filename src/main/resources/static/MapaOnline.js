@@ -1,4 +1,3 @@
-
 class MapaOnline extends Phaser.Scene {
     constructor() {
         super({ key: "MapaOnline" });
@@ -38,28 +37,15 @@ class MapaOnline extends Phaser.Scene {
     }
 
     create() {
-        
-<<<<<<< Updated upstream
-        // Crear WebSocket solo si no existe ya
-        if (!this.registry.has("socket")) {
-        const socket = new WebSocket("ws://localhost:8080/ws");
-        this.registry.set("socket", socket);
-
-        this.setupWebSocket();
-
-        }
-=======
+      
         this.socket = this.registry.get("socket");
         this.setupWebSocket();
-
->>>>>>> Stashed changes
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
             Math.max(this.scale.width / fondo.width, this.scale.height / fondo.height)
         );
-
-        const texto = this.add.text(390, 50, "TU PERSONAJE ES:", { font: "30px Arial Black" });
+        const texto = this.add.text(390, 50, "SELECCIONA UN MAPA:", { font: "30px Arial Black" });
         this.botonServer = this.add.image(config.width - 70, 50, "botonDesconectado").setScale(0.04);
 
 
@@ -74,6 +60,29 @@ class MapaOnline extends Phaser.Scene {
         this.crearBotonMapa('JuegoMesa', 2, config.width / 2, config.height / 2);
         this.crearBotonMapa('Vortice', 3, this.scale.width * 0.85, this.scale.height * 0.52, -90, 0.2);
 
+         // BOTÓN DE RETROCEDER
+        const backButton = this.add.image(0, 700, 'Boton_atras_normal')
+        .setOrigin(0, 1)
+        .setInteractive()
+        .setScale(0.7);
+
+        backButton.on('pointerover', () => {
+            backButton.setTexture('Boton_atras_encima');
+        });
+
+        backButton.on('pointerout', () => {
+            backButton.setTexture('Boton_atras_normal');
+        });
+
+        backButton.on('pointerdown', () => {
+            backButton.setTexture('Boton_atras_pulsado');
+        });
+
+        backButton.on('pointerup', async () => {
+            backButton.setTexture('Boton_atras_normal');
+            this.scene.start('partida');
+            
+        });
 
         this.checkServerStatus();
 
@@ -138,10 +147,6 @@ class MapaOnline extends Phaser.Scene {
         };
     }
     
-
-    
-    
-    
     crearBotonMapa(nombre, id, x, y, rotacion = 0, escala = 0.7) {
         const normal = `${nombre}_normal`;
         const seleccionado = `${nombre}_seleccionado`;
@@ -190,7 +195,7 @@ class MapaOnline extends Phaser.Scene {
         console.log("📤 Enviando selección de mapa: " + id);
         socket.send("m" + JSON.stringify({ mapa: id }));
     
-        this.add.text(390, 650, "Esperando al otro jugador...", { font: "30px Arial Black" });
+        this.add.text(390, 650, "Esperando al segundo jugador...", { font: "30px Arial Black" });
     }
     
     

@@ -148,7 +148,7 @@ botonPausa.on('pointerdown', () => {
 
 botonPausa.on('pointerup', () => {
     botonPausa.setTexture('Boton_pausa_normal');
-    this.scene.launch('PauseMenu', { escenaPrevia: this.scene.key });
+    this.scene.launch('PauseLocalMenu', { escenaPrevia: this.scene.key });
     this.scene.pause();
 });
     

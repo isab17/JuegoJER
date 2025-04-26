@@ -30,9 +30,7 @@ class Mapa extends Phaser.Scene {
         const backgroundC = this.add.image(this.scale.width / 2, this.scale.height / 2, 'Mapa_fondo');
         backgroundC.setScale(
             Math.max(this.scale.width / backgroundC.width, this.scale.height / backgroundC.height)
-        );
-        
-        let mapaElegido = null; 
+        ); 
     
         // MAPA DESCAMPADO
         const DescampadoButton = this.add.image(config.width / 6, config.height / 2, 'Descampado_normal')
@@ -76,8 +74,7 @@ class Mapa extends Phaser.Scene {
     
         JuegoMButton.on('pointerup', async () => {
             JuegoMButton.setTexture('JuegoMesa_normal');
-            this.scene.start('GameLocal2');
-           
+            this.scene.start('GameLocal2'); 
         });
 
         //MAPA DE VORTICE
@@ -103,6 +100,31 @@ class Mapa extends Phaser.Scene {
         this.scene.start('GameLocal3');
     
     });
+
+     // BOTÓN DE RETROCEDER
+     const backButton = this.add.image(0, 700, 'Boton_atras_normal')
+     .setOrigin(0, 1)
+     .setInteractive()
+     .setScale(0.7);
+
+    backButton.on('pointerover', () => {
+        backButton.setTexture('Boton_atras_encima');
+    });
+
+    backButton.on('pointerout', () => {
+        backButton.setTexture('Boton_atras_normal');
+    });
+
+    backButton.on('pointerdown', () => {
+        backButton.setTexture('Boton_atras_pulsado');
+    });
+
+    backButton.on('pointerup', async () => {
+        backButton.setTexture('Boton_atras_normal');
+        this.scene.start('MenuPrincipal');
+        
+    });
+
     }
 
 }

@@ -1,6 +1,11 @@
 class MapaSalaPrivada extends Phaser.Scene {
     constructor() {
         super({ key: "mapaSalaPriv" });
+
+        // === WebSocket ===
+        /** @type {WebSocket|null} */
+        this.socket = null;
+
     }
 
     preload() {

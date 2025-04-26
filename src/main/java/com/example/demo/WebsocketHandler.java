@@ -419,6 +419,9 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
                         sendToPlayer(currentPlayer, "m", Map.of("start", false, "mapa", mapa));
                     }
 
+
+                    System.out.println("📩 Mensaje recibido: " + message.getPayload());
+
                 }
                 break;
             }
@@ -581,6 +584,5 @@ private void generarPecesIniciales(Game game) {
     }
 
     game.pecesIniciales = peces;
-}
-
+    }
 }

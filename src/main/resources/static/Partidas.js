@@ -66,31 +66,19 @@ class Partidas extends Phaser.Scene {
         this.setupWebSocket();
         
         }
+      
+      //this.add.text(300, 200, 'Iniciar Sesión', { fontSize: '32px', color: '#fff' });
+      const background = this.add.image(config.width / 2, config.height / 2, 'fondo');
+      background.setScale(config.width / background.width, config.height / background.height); // Escalar fondo
 
-        this.botonServer = this.add.image(config.width - 70, 50, "botonDesconectado").setScale(0.04);
+      //Musica
+      this.sonido = this.sound.add("Sonido", { loop: true, volume: 0.8 });
+      this.sonido.play();
+      const sonidoBoton = this.sound.add("sonidoBoton", { loop: false, volume: 0.5 });
 
-        this.checkServerStatus();
-
-        this.time.addEvent({
-            delay: 5000,
-            callback: this.checkServerStatus,
-            callbackScope: this,
-            loop: true,
-        });
-
-
-        //this.add.text(300, 200, 'Iniciar Sesión', { fontSize: '32px', color: '#fff' });
-        const background = this.add.image(config.width / 2, config.height / 2, 'fondo');
-        background.setScale(config.width / background.width, config.height / background.height); // Escalar fondo
-
-        //Musica
-        this.sonido = this.sound.add("Sonido", { loop: true, volume: 0.8 });
-        this.sonido.play();
-        const sonidoBoton = this.sound.add("sonidoBoton", { loop: false, volume: 0.5 });
-
-        const botonBuscarP = this.add.image(config.width / 2, 330, 'Buscar_normal')
-            .setInteractive() //Hacerlo interactivo
-            .setScale(0.6) // Escalado del boton
+    const botonBuscarP = this.add.image(config.width / 2, 330, 'Buscar_normal')
+        .setInteractive() //Hacerlo interactivo
+        .setScale(0.6) // Escalado del boton
 
         //Insercion de los diferentes diseños de los botones segun la condicion
         .on('pointerover', () => botonBuscarP.setTexture('Buscar_seleccionado'))
@@ -157,6 +145,14 @@ class Partidas extends Phaser.Scene {
             
         });
 
+        this.checkServerStatus();
+
+        this.time.addEvent({
+            delay: 5000,
+            callback: this.checkServerStatus,
+            callbackScope: this,
+            loop: true,
+        });
     }
 
     setupWebSocket() {
@@ -207,15 +203,15 @@ class Partidas extends Phaser.Scene {
         try {
             const response = await fetch('/api/users/status');
             const status = await response.text();
-
-            if (status === "active") {
-                this.botonServer.setTexture("botonConectado");
-            } else {
-                this.botonServer.setTexture("botonDesconectado");
+    
+            if (this.botonServer) {
+                this.botonServer.setTexture(status === "active" ? "botonConectado" : "botonDesconectado");
             }
         } catch (error) {
             console.error('Error al verificar el estado del servidor:', error);
-            this.botonServer.setTexture("botonDesconectado");
+            if (this.botonServer) {
+                this.botonServer.setTexture("botonDesconectado");
+            }
             this.scene.start('MenuPrincipal');
         }
     }
