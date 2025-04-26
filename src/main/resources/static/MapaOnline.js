@@ -41,6 +41,8 @@ class MapaOnline extends Phaser.Scene {
         this.socket = this.registry.get("socket");
         this.setupWebSocket();
 
+        this.botonesMapa = [];
+
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
             Math.max(this.scale.width / fondo.width, this.scale.height / fondo.height)
@@ -154,7 +156,7 @@ class MapaOnline extends Phaser.Scene {
     
         const btn = this.add.image(x, y, normal).setInteractive().setScale(escala);
         btn.setInteractive({ useHandCursor: true }).disableInteractive();
-
+    
         btn.angle = rotacion;
     
         btn.on('pointerover', () => btn.setTexture(seleccionado));
@@ -166,22 +168,27 @@ class MapaOnline extends Phaser.Scene {
         btn.on('pointerup', () => {
             btn.setTexture(normal);
         });
-
-        this.time.addEvent({
-            delay: 100, // comprueba cada 100ms
-            loop: true,
-            callback: () => {
-                if (this.socketListo) {
-                    this.children.list.forEach(obj => {
-                        if (obj.input && obj.texture && obj.texture.key.includes("_normal")) {
-                            obj.setInteractive();
-                        }
-                    });
+    
+        this.botonesMapa.push(btn); // ← Aquí lo guardas
+    
+        // Ahora también guarda el evento que refresca botones:
+        if (!this.timerRefreshButtons) {
+            this.timerRefreshButtons = this.time.addEvent({
+                delay: 100,
+                loop: true,
+                callback: () => {
+                    if (this.socketListo) {
+                        this.botonesMapa.forEach(obj => {
+                            if (obj.input && obj.texture && obj.texture.key.includes("_normal")) {
+                                obj.setInteractive();
+                            }
+                        });
+                    }
                 }
-            }
-        });
-        
+            });
+        }
     }
+    
     
 
     seleccionarMapa(id) {
@@ -195,8 +202,21 @@ class MapaOnline extends Phaser.Scene {
         console.log("📤 Enviando selección de mapa: " + id);
         socket.send("m" + JSON.stringify({ mapa: id }));
     
+        // Desactivar todos los botones de mapa
+        this.botonesMapa.forEach(btn => {
+            btn.disableInteractive();
+        });
+    
+        // Cancelar el temporizador que reactivaba botones
+        if (this.timerRefreshButtons) {
+            this.timerRefreshButtons.remove(false);
+            this.timerRefreshButtons = null;
+        }
+    
+        // Mostrar mensaje de espera
         this.add.text(390, 650, "Esperando al segundo jugador...", { font: "30px Arial Black" });
     }
+    
     
     
     
