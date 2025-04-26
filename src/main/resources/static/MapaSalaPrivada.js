@@ -2,9 +2,8 @@ class MapaSalaPrivada extends Phaser.Scene {
     constructor() {
         super({ key: "mapaSalaPriv" });
 
-        // === WebSocket ===
-        /** @type {WebSocket|null} */
         this.socket = null;
+        this.socketListo = false;
 
     }
 
@@ -64,6 +63,7 @@ class MapaSalaPrivada extends Phaser.Scene {
         this.crearBotonMapa('Vortice', 3, this.scale.width * 0.85, this.scale.height * 0.52, -90, 0.2);
 
             // BOTÓN DE RETROCEDER
+
         const backButton = this.add.image(0, 700, 'Boton_atras_normal')
         .setOrigin(0, 1)
         .setInteractive()
@@ -199,7 +199,6 @@ class MapaSalaPrivada extends Phaser.Scene {
             console.warn(" No se puede enviar mapa: socket no conectado aún.");
             return;
         }
-    
         console.log(" Mapa seleccionado : " + id);
         this.mapaElegido = id;
     
@@ -236,6 +235,8 @@ class MapaSalaPrivada extends Phaser.Scene {
         }
         return codigo;
     }
+    
+    
     
     async checkServerStatus() {
         try {

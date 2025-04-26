@@ -55,6 +55,9 @@ class Partidas extends Phaser.Scene {
       this.load.audio("sonidoBoton", "assets/musica/SonidoBoton.mp3");
       this.load.audio("Sonido", "assets/musica/MenuPrincipal.mp3");
 
+      this.load.image('CaraGatoA', 'assets/sprites/CaraGatoAOnline.png');
+      this.load.image('CaraGatoB', 'assets/sprites/CaraGatoBOnline.png');
+
     }
   
     create() {
@@ -67,6 +70,34 @@ class Partidas extends Phaser.Scene {
         this.setupWebSocket();
         
         }
+
+      
+      //this.add.text(300, 200, 'Iniciar Sesión', { fontSize: '32px', color: '#fff' });
+      const background = this.add.image(config.width / 2, config.height / 2, 'fondo');
+      background.setScale(config.width / background.width, config.height / background.height); // Escalar fondo
+
+      //Musica
+      this.sonido = this.sound.add("Sonido", { loop: true, volume: 0.8 });
+      this.sonido.play();
+      const sonidoBoton = this.sound.add("sonidoBoton", { loop: false, volume: 0.5 });
+    const CaraGatoA = this.add.image(200, 400,'CaraGatoA').setScale(0.6)
+    const CaraGatoB = this.add.image(1000, 400,'CaraGatoB').setScale(0.6)
+    const botonBuscarP = this.add.image(config.width / 2, 330, 'Buscar_normal')
+        .setInteractive() //Hacerlo interactivo
+        .setScale(0.6) // Escalado del boton
+
+        //Insercion de los diferentes diseños de los botones segun la condicion
+        .on('pointerover', () => botonBuscarP.setTexture('Buscar_seleccionado'))
+        .on('pointerout', () => botonBuscarP.setTexture('Buscar_normal'))
+        .on('pointerdown', () => botonBuscarP.setTexture('Buscar_presionado'))
+        .on('pointerup', () => {
+            botonBuscarP.setTexture('Buscar_normal');
+            sonidoBoton.play();
+
+            this.scene.start('MapaOnline');
+            
+        });
+
 
         //this.add.text(300, 200, 'Iniciar Sesión', { fontSize: '32px', color: '#fff' });
         const background = this.add.image(config.width / 2, config.height / 2, 'fondo');
