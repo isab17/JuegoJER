@@ -37,10 +37,9 @@ class MapaOnline extends Phaser.Scene {
     }
 
     create() {
-        
+      
         this.socket = this.registry.get("socket");
         this.setupWebSocket();
-
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
