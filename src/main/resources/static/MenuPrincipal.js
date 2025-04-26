@@ -218,6 +218,8 @@ class MenuPrincipal extends Phaser.Scene {
                 if (status === "active") {
                     this.serverActive = true;
                     this.botonServer.setTexture("botonConectado");
+                    this.botonOnline.setTexture("Online_normal");
+                    this.botonOnline.setInteractive();
                 }
             })
             .catch(error => {

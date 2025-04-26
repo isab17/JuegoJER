@@ -11,6 +11,9 @@ class ResultScreen extends Phaser.Scene {
         this.load.image('Boton_continuar_normal', 'assets/Interfaces montadas/continuar/normal.png');
         this.load.image('Boton_continuar_encima', 'assets/Interfaces montadas/continuar/seleccionado.png');
         this.load.image('Boton_continuar_pulsado', 'assets/Interfaces montadas/continuar/pulsado.png');
+
+        this.load.image('CaraGatoA', 'assets/inventario/Menta.png');
+        this.load.image('CaraGatoB', 'assets/inventario/Chocolate.png');
     }
 
     create() {
@@ -59,14 +62,41 @@ class ResultScreen extends Phaser.Scene {
             strokeThickness: 6,
         }).setOrigin(0.5);
 
-        // Texto de puntuaciones - más abajo y más centrado
-        this.add.text(650, 690, `Gato A: ${puntosA}   |   Gato B: ${puntosB}`, {
+        // Caras de gato
+        const caraGatoA = this.add.image(300, 690, 'CaraGatoA');
+        caraGatoA.setScale(0.1, 0.1);
+        caraGatoA.setOrigin(0.5);
+
+        const textoPuntosA = this.add.text(370, 690, `${puntosA}`, {
             font: '48px Arial',
             color: '#FFFFFF',
             fontStyle: 'bold',
             stroke: '#000000',
             strokeThickness: 6,
         }).setOrigin(0.5);
+
+        // Separador
+        this.add.text(650, 690, '|', {
+            font: '48px Arial',
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 6,
+        }).setOrigin(0.5);
+
+        // Caras de gato
+        const caraGatoB = this.add.image(930, 690, 'CaraGatoB');
+        caraGatoB.setScale(0.1, 0.1);
+        caraGatoB.setOrigin(0.5);
+
+        const textoPuntosB = this.add.text(860, 690, `${puntosB}`, {
+            font: '48px Arial',
+            color: '#FFFFFF',
+            fontStyle: 'bold',
+            stroke: '#000000',
+            strokeThickness: 6,
+        }).setOrigin(0.5);
+
 
         // Botón para volver al menú
         const nextButton = this.add.image(1200, 700, 'Boton_continuar_normal')

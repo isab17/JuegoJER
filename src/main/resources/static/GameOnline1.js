@@ -859,7 +859,7 @@ updateTimer() {
 handlePauseSync(data) {
     if (data.pause) {
         console.log("⏸️ Pausa activada");
-        this.scene.launch('PauseMenu', { escenaPrevia: this.scene.key });
+        this.scene.launch('PauseMenuOnline', { escenaPrevia: this.scene.key });
         if (this.scene.isActive(this.escenaPrevia)) {
             this.scene.pause(this.escenaPrevia);
             console.log("⏸️ Pausa activada");

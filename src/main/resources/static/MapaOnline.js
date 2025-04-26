@@ -196,7 +196,7 @@ class MapaOnline extends Phaser.Scene {
         console.log("📤 Enviando selección de mapa: " + id);
         socket.send("m" + JSON.stringify({ mapa: id }));
     
-        this.add.text(390, 650, "Esperando al otro jugador...", { font: "30px Arial Black" });
+        this.add.text(390, 650, "Esperando al segundo jugador...", { font: "30px Arial Black" });
     }
     
     
