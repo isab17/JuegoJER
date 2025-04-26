@@ -214,8 +214,7 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
         char type = payload.charAt(0);
         String data = payload.length() > 1 ? payload.substring(1) : "";
 
-        // Permitir mensajes incluso sin game (por ejemplo, 'm')
-        if (game == null && type != 'm') return;
+        if (game == null && type != 'm' && type != 'l') return;
 
         Player otherPlayer = (game != null) ? ((game.player1 == currentPlayer) ? game.player2 : game.player1) : null;
 
@@ -444,9 +443,69 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
                     sendToPlayer(game.player2, "z", pauseData);
             
                 } catch (NumberFormatException e) {
-                    System.err.println("❌ Error al parsear playerId en mensaje 'z': " + data);
+                    System.err.println(" Error al parsear playerId en mensaje 'z': " + data);
                     e.printStackTrace();
                 }
+                break;
+            }
+
+            case 'l': {
+                Map<String, Object> lobbyData = mapper.readValue(data, Map.class);
+                int mapaRecibido = (int) lobbyData.get("mapa");
+                String codigo = (String) lobbyData.get("codigo");
+            
+                if (codigo == null || codigo.isEmpty()) {
+                    System.out.println("❌ Código de sala inválido.");
+                    sendToPlayer(currentPlayer, "error", Map.of("mensaje", "Código inválido"));
+                    return;
+                }
+            
+                Sala sala = salasPrivadas.get(codigo);
+            
+                if (sala == null) {
+                    // No existe sala => crearla
+                    sala = new Sala();
+                    sala.jugador1 = currentPlayer;
+                    salasPrivadas.put(codigo, sala);
+            
+                    currentPlayer.playerId = 1;
+                    currentPlayer.x = 200;
+                    currentPlayer.y = 620;
+                    currentPlayer.map = mapaRecibido; //  Guardar mapa solo en jugador1
+            
+                    System.out.println(" Sala creada con código: " + codigo + ", esperando jugador 2...");
+                    sendToPlayer(currentPlayer, "m", Map.of("start", false)); // opcional
+                    return;
+                }
+            
+                if (sala.iniciada || sala.jugador2 != null) {
+                    System.out.println(" Sala " + codigo + " llena");
+                    sendToPlayer(currentPlayer, "error", Map.of("mensaje", "Sala llena"));
+                    return;
+                }
+            
+                //  Ya existe el primer jugador
+                sala.jugador2 = currentPlayer;
+                sala.iniciada = true;
+            
+                currentPlayer.playerId = 2;
+                currentPlayer.x = 1090;
+                currentPlayer.y = 160;
+                currentPlayer.map = sala.jugador1.map; // Copiar el mapa del jugador1
+            
+                Game newGame = new Game(sala.jugador1, sala.jugador2);
+                sala.game = newGame;
+                games.put(sala.jugador1.session.getId(), newGame);
+                games.put(sala.jugador2.session.getId(), newGame);
+            
+                int mapaSala = sala.jugador1.map; // El mapa elegido
+            
+                System.out.println(" Partida iniciada para sala " + codigo + " en mapa " + mapaSala);
+            
+                sendToPlayer(sala.jugador1, "m", Map.of("start", true, "mapa", mapaSala));
+                sendToPlayer(sala.jugador2, "m", Map.of("start", true, "mapa", mapaSala));
+            
+                startGame(newGame);
                 break;
             }
             

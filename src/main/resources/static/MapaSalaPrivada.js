@@ -41,6 +41,7 @@ class MapaSalaPrivada extends Phaser.Scene {
         this.socket = this.registry.get("socket");
         this.setupWebSocket();
 
+        this.botonesMapa = [];
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
@@ -61,7 +62,8 @@ class MapaSalaPrivada extends Phaser.Scene {
         this.crearBotonMapa('JuegoMesa', 2, config.width / 2, config.height / 2);
         this.crearBotonMapa('Vortice', 3, this.scale.width * 0.85, this.scale.height * 0.52, -90, 0.2);
 
-         // BOTÓN DE RETROCEDER
+            // BOTÓN DE RETROCEDER
+
         const backButton = this.add.image(0, 700, 'Boton_atras_normal')
         .setOrigin(0, 1)
         .setInteractive()
@@ -155,7 +157,7 @@ class MapaSalaPrivada extends Phaser.Scene {
     
         const btn = this.add.image(x, y, normal).setInteractive().setScale(escala);
         btn.setInteractive({ useHandCursor: true }).disableInteractive();
-
+    
         btn.angle = rotacion;
     
         btn.on('pointerover', () => btn.setTexture(seleccionado));
@@ -167,38 +169,72 @@ class MapaSalaPrivada extends Phaser.Scene {
         btn.on('pointerup', () => {
             btn.setTexture(normal);
         });
-
-        this.time.addEvent({
-            delay: 100, // comprueba cada 100ms
-            loop: true,
-            callback: () => {
-                if (this.socketListo) {
-                    this.children.list.forEach(obj => {
-                        if (obj.input && obj.texture && obj.texture.key.includes("_normal")) {
-                            obj.setInteractive();
-                        }
-                    });
+    
+        this.botonesMapa.push(btn); // ← Aquí lo guardas
+    
+        // Ahora también guarda el evento que refresca botones:
+        if (!this.timerRefreshButtons) {
+            this.timerRefreshButtons = this.time.addEvent({
+                delay: 100,
+                loop: true,
+                callback: () => {
+                    if (this.socketListo) {
+                        this.botonesMapa.forEach(obj => {
+                            if (obj.input && obj.texture && obj.texture.key.includes("_normal")) {
+                                obj.setInteractive();
+                            }
+                        });
+                    }
                 }
-            }
-        });
-        
+            });
+        }
     }
+    
     
 
     seleccionarMapa(id) {
         const socket = this.registry.get("socket");
     
         if (!socket || socket.readyState !== WebSocket.OPEN) {
-            console.warn("❌ No se puede enviar mapa: socket no conectado aún.");
+            console.warn(" No se puede enviar mapa: socket no conectado aún.");
             return;
         }
+        console.log(" Mapa seleccionado : " + id);
+        this.mapaElegido = id;
     
-        console.log("📤 Enviando selección de mapa: " + id);
-        socket.send("m" + JSON.stringify({ mapa: id }));
+        // 1. Desactivar y ocultar todos los botones de mapa
+        this.botonesMapa.forEach(btn => {
+            btn.disableInteractive();
+            btn.setVisible(false);
+        });
     
-        this.add.text(390, 650, "Esperando al segundo jugador...", { font: "30px Arial Black" });
+        if (this.timerRefreshButtons) {
+            this.timerRefreshButtons.remove(false);
+            this.timerRefreshButtons = null;
+        }
+    
+        // 2. Generar el código de sala
+        const codigoSala = this.generarCodigoSala(6); 
+        this.codigoSala = codigoSala;
+    
+        this.add.text(420, 300, "Código de Sala:", { font: "bold 30px Arial Black", color: "#000" });
+        this.add.text(450, 350, codigoSala, { font: "bold 40px Arial Black", color: "#1b5e20" });
+
+        socket.send('l' + JSON.stringify({mapa: id, codigo: codigoSala}));
+
+        console.log(" Enviado mensaje de creación sala privada:", { mapa: id, codigo: codigoSala });
+
     }
     
+
+    generarCodigoSala(longitud = 6) {
+        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let codigo = '';
+        for (let i = 0; i < longitud; i++) {
+            codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+        }
+        return codigo;
+    }
     
     
     

@@ -14,6 +14,11 @@ const config = {
             debug: false // Desactivar el modo de depuración
         }
     },
+    
+    dom: {
+        createContainer: true
+    },
+    
 
     scene: [Iniciarsesion, MapaOnline,MapaSalaPrivada, MenuPrincipal, Chat, TutorialScene1, TutorialScene2, TutorialScene3, TutorialScene4, Creditos,Partidas, GameOnline1,Mapa, GameLocal1, GameLocal2, PauseLocalMenu,PauseMenuOnline, ResultScreen], 
 
