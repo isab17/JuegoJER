@@ -203,6 +203,8 @@ public class WebsocketHandler extends TextWebSocketHandler {
 
     @Override
 protected void handleTextMessage(WebSocketSession session, TextMessage message) {
+    
+    System.out.println("📩 Mensaje recibido: " + message.getPayload());
     try {
 
         Player currentPlayer = players.get(session.getId());
@@ -416,6 +418,7 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
                     } else {
                         sendToPlayer(currentPlayer, "m", Map.of("start", false, "mapa", mapa));
                     }
+
 
                     System.out.println("📩 Mensaje recibido: " + message.getPayload());
 

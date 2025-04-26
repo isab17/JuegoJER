@@ -66,7 +66,7 @@ class Partidas extends Phaser.Scene {
         this.setupWebSocket();
         
         }
-
+      
       //this.add.text(300, 200, 'Iniciar Sesión', { fontSize: '32px', color: '#fff' });
       const background = this.add.image(config.width / 2, config.height / 2, 'fondo');
       background.setScale(config.width / background.width, config.height / background.height); // Escalar fondo
@@ -153,7 +153,6 @@ class Partidas extends Phaser.Scene {
             callbackScope: this,
             loop: true,
         });
-
     }
 
     setupWebSocket() {
@@ -216,5 +215,4 @@ class Partidas extends Phaser.Scene {
             this.scene.start('MenuPrincipal');
         }
     }
-    
 }
