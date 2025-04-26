@@ -2,9 +2,8 @@ class MapaSalaPrivada extends Phaser.Scene {
     constructor() {
         super({ key: "mapaSalaPriv" });
 
-        // === WebSocket ===
-        /** @type {WebSocket|null} */
         this.socket = null;
+        this.socketListo = false;
 
     }
 
@@ -39,14 +38,9 @@ class MapaSalaPrivada extends Phaser.Scene {
 
     create() {
         
-        // Crear WebSocket solo si no existe ya
-        if (!this.registry.has("socket")) {
-        const socket = new WebSocket("ws://localhost:8080/ws");
-        this.registry.set("socket", socket);
-
+        this.socket = this.registry.get("socket");
         this.setupWebSocket();
 
-        }
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
@@ -67,6 +61,29 @@ class MapaSalaPrivada extends Phaser.Scene {
         this.crearBotonMapa('JuegoMesa', 2, config.width / 2, config.height / 2);
         this.crearBotonMapa('Vortice', 3, this.scale.width * 0.85, this.scale.height * 0.52, -90, 0.2);
 
+         // BOTÓN DE RETROCEDER
+        const backButton = this.add.image(0, 700, 'Boton_atras_normal')
+        .setOrigin(0, 1)
+        .setInteractive()
+        .setScale(0.7);
+
+        backButton.on('pointerover', () => {
+            backButton.setTexture('Boton_atras_encima');
+        });
+
+        backButton.on('pointerout', () => {
+            backButton.setTexture('Boton_atras_normal');
+        });
+
+        backButton.on('pointerdown', () => {
+            backButton.setTexture('Boton_atras_pulsado');
+        });
+
+        backButton.on('pointerup', async () => {
+            backButton.setTexture('Boton_atras_normal');
+            this.scene.start('partida');
+            
+        });
 
         this.checkServerStatus();
 
@@ -80,6 +97,10 @@ class MapaSalaPrivada extends Phaser.Scene {
     setupWebSocket() {
         this.socket = this.registry.get("socket");
     
+        if (this.socket.readyState === WebSocket.OPEN) {
+            this.socketListo = true;
+        }
+    
         this.socket.onopen = () => {
             console.log('✅ Conectado al servidor WebSocket');
             this.socketListo = true;
@@ -88,40 +109,44 @@ class MapaSalaPrivada extends Phaser.Scene {
         this.socket.onmessage = (event) => {
             const type = event.data.charAt(0);
             const data = event.data.length > 1 ? JSON.parse(event.data.substring(1)) : null;
-        
+    
             switch (type) {
-                case 'm': // mapa confirmado por servidor
+                case 'm':
                     console.log("🗺️ Recibido mensaje 'm':", data);
-                    this.mapaConfirmado = data?.mapa;
+                    if (data.start) {
+                        this.mapaConfirmado = data.mapa;
+                    } else {
+                        console.log("⏳ Esperando otro jugador...");
+                    }
                     break;
-        
-                case 'i': // INIT del juego
+
+                case 'i':
                     console.log("✅ Recibido INIT:", data);
                     if (!data?.id) {
                         console.error("❌ INIT sin ID de jugador válido:", data);
                         return;
                     }
-                
+
                     this.registry.set('jugadorId', data.id);
                     this.registry.set('socket', this.socket);
-                    this.registry.set('initData', data); 
-                
+                    this.registry.set('initData', data);
+
                     if (this.mapaConfirmado) {
+                        console.log("🚀 Iniciando escena GameOnline1");
                         this.scene.start('GameOnline1');
+                    } else {
+                        console.warn("⚠️ INIT recibido pero mapa no confirmado aún.");
                     }
                     break;
-                
+
+
             }
         };
-        
-        
     
         this.socket.onclose = () => {
             console.warn("⚠️ Conexión cerrada desde MapaOnline");
         };
     }
-    
-    
     
     crearBotonMapa(nombre, id, x, y, rotacion = 0, escala = 0.7) {
         const normal = `${nombre}_normal`;
@@ -168,10 +193,13 @@ class MapaSalaPrivada extends Phaser.Scene {
             return;
         }
     
+        console.log("📤 Enviando selección de mapa: " + id);
         socket.send("m" + JSON.stringify({ mapa: id }));
     
-        this.add.text(390, 650, "Esperando al otro jugador...", { font: "30px Arial Black" });
+        this.add.text(390, 650, "Esperando al segundo jugador...", { font: "30px Arial Black" });
     }
+    
+    
     
     
     async checkServerStatus() {

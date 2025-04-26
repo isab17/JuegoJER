@@ -97,8 +97,8 @@ preload() {
     this.load.image('Boton_pausa_encima', 'assets/Interfaces montadas/pausa/seleccionado.png');
     this.load.image('Boton_pausa_pulsado', 'assets/Interfaces montadas/pausa/pulsado.png');
 
-    this.load.image('CaraGatoA', 'assets/inventario/Menta.png');
-    this.load.image('CaraGatoB', 'assets/inventario/Chocolate.png');
+    this.load.image('CaraGatoA', 'assets/sprites/CaraGatoAOnline.png');
+    this.load.image('CaraGatoB', 'assets/sprites/CaraGatoBOnline.png');
 
     // Cargar la música
     //this.load.audio("backgroundMusic", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
