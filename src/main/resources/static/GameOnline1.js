@@ -97,8 +97,8 @@ preload() {
     this.load.image('Boton_pausa_encima', 'assets/Interfaces montadas/pausa/seleccionado.png');
     this.load.image('Boton_pausa_pulsado', 'assets/Interfaces montadas/pausa/pulsado.png');
 
-    this.load.image('CaraGatoA', 'assets/sprites/CaraGatoAOnline.png');
-    this.load.image('CaraGatoB', 'assets/sprites/CaraGatoBOnline.png');
+    this.load.image('CaraGatoOnlineA', 'assets/sprites/CaraGatoAOnline.png');
+    this.load.image('CaraGatoOnlineB', 'assets/sprites/CaraGatoBOnline.png');
 
     // Cargar la música
     //this.load.audio("backgroundMusic", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
@@ -1292,7 +1292,7 @@ _crearUIJugador(jugadorKey, xPleg, xDes, xIcono, xCara, xTexto) {
         .setDepth(10);
 
     // === Cara del jugador
-    this.add.image(xCara, 35, caraKey).setScale(0.15).setDepth(5);
+    this.add.image(xCara, 48, caraKey).setScale(0.15).setDepth(5);
 
     // === Texto de puntuación
     const textoPuntos = this.add.text(xTexto, 13, " 0 ", {

@@ -20,8 +20,8 @@ const config = {
     },
     
 
-    scene: [Iniciarsesion, MapaOnline,MapaSalaPrivada, MenuPrincipal, Chat, TutorialScene1, TutorialScene2, TutorialScene3, TutorialScene4, Creditos,Partidas, GameOnline1,Mapa, GameLocal1, GameLocal2, PauseLocalMenu,PauseMenuOnline, ResultScreen], 
-
+    scene: [Iniciarsesion, MapaOnline,MapaSalaPrivada, MenuPrincipal, Chat, TutorialScene1, TutorialScene2, TutorialScene3, TutorialScene4, Creditos,Partidas, GameOnline1,Mapa, GameLocal1, GameLocal2,GameLocal3, PauseLocalMenu,PauseMenuOnline, ResultScreen,ResultLocalScreen], 
+    
     audio: {
         disableWebAudio: false // Configuración para el audio
     }
@@ -36,7 +36,7 @@ let gatoA, gatoB;
 
 let cursor,keys,izqA,izqB,arribaA,arribaB,peces,gatoAwait,gatoBwait, puntosA=0, puntosB=0, textoA, 
 textoB,arbusto,pez,zonasProhibidas,tierra,pesca,mapa, abiertoA, abiertoB, pezGloboA, 
-pezGloboB,agua,mapaElegido, gameID, nombreA, nombreB,botonServer,botonOnline;
+pezGloboB,agua,mapaElegido, gameID, nombreA, nombreB,botonServer,botonOnline,backButton;
 
 
 

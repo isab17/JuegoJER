@@ -64,28 +64,30 @@ class MapaSalaPrivada extends Phaser.Scene {
 
             // BOTÓN DE RETROCEDER
 
-        const backButton = this.add.image(0, 700, 'Boton_atras_normal')
+        // BOTÓN DE RETROCEDER
+
+        this.backButton = this.add.image(0, 700, 'Boton_atras_normal')
         .setOrigin(0, 1)
         .setInteractive()
         .setScale(0.7);
 
-        backButton.on('pointerover', () => {
-            backButton.setTexture('Boton_atras_encima');
+        this.backButton.on('pointerover', () => {
+        this.backButton.setTexture('Boton_atras_encima');
         });
 
-        backButton.on('pointerout', () => {
-            backButton.setTexture('Boton_atras_normal');
+        this.backButton.on('pointerout', () => {
+        this.backButton.setTexture('Boton_atras_normal');
         });
 
-        backButton.on('pointerdown', () => {
-            backButton.setTexture('Boton_atras_pulsado');
+        this.backButton.on('pointerdown', () => {
+        this.backButton.setTexture('Boton_atras_pulsado');
         });
 
-        backButton.on('pointerup', async () => {
-            backButton.setTexture('Boton_atras_normal');
-            this.scene.start('partida');
-            
+        this.backButton.on('pointerup', async () => {
+        this.backButton.setTexture('Boton_atras_normal');
+        this.scene.start('partida');
         });
+
 
         this.checkServerStatus();
 
@@ -205,20 +207,26 @@ class MapaSalaPrivada extends Phaser.Scene {
         // 1. Desactivar y ocultar todos los botones de mapa
         this.botonesMapa.forEach(btn => {
             btn.disableInteractive();
-            btn.setVisible(false);
         });
     
         if (this.timerRefreshButtons) {
             this.timerRefreshButtons.remove(false);
             this.timerRefreshButtons = null;
         }
-    
+        this.backButton.setVisible(false);
         // 2. Generar el código de sala
         const codigoSala = this.generarCodigoSala(6); 
         this.codigoSala = codigoSala;
+        // Fondo popup
+        const fondoPopup = this.add.rectangle(620, 630, 600, 50, 0x8b0a82, 0.9)
+            .setStrokeStyle(4, 0xffffff)
+            .setOrigin(0.5)
+            .setDepth(0);
     
-        this.add.text(420, 300, "Código de Sala:", { font: "bold 30px Arial Black", color: "#000" });
-        this.add.text(450, 350, codigoSala, { font: "bold 40px Arial Black", color: "#1b5e20" });
+    
+        this.add.text(355, 616, "CÓDIGO DE SALA:", { font: "30px Arial Black"}).setDepth(1);
+        this.add.text(725, 616, codigoSala, { font: "30px Arial Black", color: "#51b9df" }).setDepth(1);
+        this.add.text(400, 670, "Esperando al segundo jugador...", { font: "25px Arial Black" });
 
         socket.send('l' + JSON.stringify({mapa: id, codigo: codigoSala}));
 

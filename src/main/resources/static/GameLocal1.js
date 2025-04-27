@@ -1070,13 +1070,13 @@ explotarPezGlobo(pez) {
 
         if (coordAActualizada.distance(explosion) <= radioExplosion) {
             puntosA = puntosA - 2;
-            textoA.setText("Puntos: " + puntosA);
+            textoA.setText(" " + puntosA);
             console.log("Gato A recibió daño. Puntos: " + puntosA);
         }
 
         if (coordBActualizada.distance(explosion) <= radioExplosion) {
             puntosB = puntosB - 2;
-            textoB.setText("Puntos: " + puntosB);
+            textoB.setText(" " + puntosB);
             console.log("Gato B recibió daño. Puntos: " + puntosB);
         }
     });
@@ -1098,7 +1098,7 @@ updateTimer() {
 
 timeUp() {
     
-    this.scene.start("ResultScreen"); // Cambiar a la escena ResultScreen
+    this.scene.start("ResultLocalScreen"); // Cambiar a la escena ResultScreen
 }
 
 } 

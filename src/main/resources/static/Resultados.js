@@ -41,60 +41,42 @@ class ResultScreen extends Phaser.Scene {
 
         if (esEmpate) {
             fondoKey = 'fondo_empate';
-            mensaje = '¡Es un empate!';
+            mensaje = '¡ES UN EMPATE!';
         } else if (esGanador) {
             fondoKey = jugadorId === 1 ? 'fondo_victoria_gatoA' : 'fondo_victoria_gatoB';
-            mensaje = '¡Has ganado!';
+            mensaje = '¡HAS GANADO!';
         } else {
             fondoKey = jugadorId === 1 ? 'fondo_victoria_gatoB' : 'fondo_victoria_gatoA';
-            mensaje = '¡Has perdido!';
+            mensaje = '¡HAS PERDIDO!';
         }
 
         // Fondo
         this.add.image(370, 200, fondoKey).setOrigin(0.29).setScale(0.75);
 
         // Mensaje principal
-        this.add.text(650, 630, mensaje, {
-            font: '48px Arial',
-            color: '#FFFFFF',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 6,
+        this.add.text(650, 50, mensaje, {
+            font: '30px Arial Black',
+            color: '#1e5a8a',
         }).setOrigin(0.5);
 
         // Caras de gato
-        const caraGatoA = this.add.image(300, 690, 'CaraGatoA');
-        caraGatoA.setScale(0.1, 0.1);
-        caraGatoA.setOrigin(0.5);
+        const caraA = this.add.image(100, 150, 'CaraGatoA');
+        caraA.setScale(0.3, 0.3);
+        caraA.setOrigin(0.5);
 
-        const textoPuntosA = this.add.text(370, 690, `${puntosA}`, {
-            font: '48px Arial',
-            color: '#FFFFFF',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 6,
-        }).setOrigin(0.5);
-
-        // Separador
-        this.add.text(650, 690, '|', {
-            font: '48px Arial',
-            color: '#FFFFFF',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 6,
+        const textoPuntosA = this.add.text(180, 150, `${puntosA}`, {
+            font: '30px Arial Black',
+            color: '#1e5a8a',
         }).setOrigin(0.5);
 
         // Caras de gato
-        const caraGatoB = this.add.image(930, 690, 'CaraGatoB');
-        caraGatoB.setScale(0.1, 0.1);
-        caraGatoB.setOrigin(0.5);
+        const caraB = this.add.image(100, 350, 'CaraGatoB');
+        caraB.setScale(0.3, 0.);
+        caraB.setOrigin(0.5);
 
-        const textoPuntosB = this.add.text(860, 690, `${puntosB}`, {
-            font: '48px Arial',
-            color: '#FFFFFF',
-            fontStyle: 'bold',
-            stroke: '#000000',
-            strokeThickness: 6,
+        const textoPuntosB = this.add.text(180, 350, `${puntosB}`, {
+            font: '30px Arial Black',
+            color: '#1e5a8a',
         }).setOrigin(0.5);
 
 

@@ -1061,14 +1061,14 @@ explotarPezGlobo(pez) {
         // Comprobar si Gato A está dentro del rango de la explosión
         if (coordAActualizada.distance(explosion) <= radioExplosion) {
             puntosA = puntosA - 2;
-            textoA.setText("Puntos: " + puntosA);
+            textoA.setText(" " + puntosA);
             console.log("Gato A recibió daño. Puntos: " + puntosA);
         }
 
         // Comprobar si Gato B está dentro del rango de la explosión
         if (coordBActualizada.distance(explosion) <= radioExplosion) {
             puntosB = puntosB - 2;
-            textoB.setText("Puntos: " + puntosB);
+            textoB.setText(" " + puntosB);
             console.log("Gato B recibió daño. Puntos: " + puntosB);
         }
     }); // Retraso de 7 segundos antes de ejecutar la explosión
@@ -1088,7 +1088,7 @@ updateTimer() {
 }
 
 timeUp() {
-    this.scene.start("ResultScreen"); // Cambiar a la escena ResultScreen
+    this.scene.start("ResultLocalScreen"); // Cambiar a la escena ResultScreen
 }
 
 

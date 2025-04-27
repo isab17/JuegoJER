@@ -125,11 +125,11 @@ create() {
     //Puntos de los jugadores
     const caraGatoA =this.add.image(450, 50, 'CaraGatoA');
     caraGatoA.setScale(0.18, 0.18);
-    textoA=this.add.text(345,35, " 0 ", {font: "30px Arial Black",color: "#000000"});      // AJUSTAR LETRA, TAMAÑO, ETC
+    textoA=this.add.text(340,32, " 0 ", {font: "30px Arial Black",color: "#000000"});      // AJUSTAR LETRA, TAMAÑO, ETC
 
     const caraGatoB =this.add.image(750, 50, 'CaraGatoB');
     caraGatoB.setScale(0.18, 0.18);
-    textoB=this.add.text(795,35, " 0 ", {font: "30px Arial Black",color: "#000000"});      // AJUSTAR LETRA, TAMAÑO, ETC
+    textoB=this.add.text(790,30, " 0 ", {font: "30px Arial Black",color: "#000000"});      // AJUSTAR LETRA, TAMAÑO, ETC
     
     const botonPausa = this.add.image(1150, 40, 'Boton_pausa_normal').setInteractive().setScale(0.45);
 
@@ -475,30 +475,28 @@ this.timerText.setDepth(10);         // Establecer la profundidad para asegurars
     });*/
 
     agua=[
-        { x: 500, y: 370, width: 180, height: 25 },
-        { x: 500, y: 355, width: 180, height: 25 },
-        { x: 500, y: 340, width: 180, height: 25 },
-        { x: 500, y: 325, width: 180, height: 25 },
-        { x: 500, y: 310, width: 180, height: 25 },
-        { x: 500, y: 290, width: 180, height: 25 },
-        { x: 500, y: 275, width: 180, height: 25 },
-        { x: 500, y: 260, width: 180, height: 25 },
-        { x: 500, y: 245, width: 180, height: 25 },
+        { x: 520, y: 370, width: 140, height: 10 },
+        { x: 520, y: 355, width: 140, height: 25 },
+        { x: 520, y: 340, width: 140, height: 25 },
+        { x: 520, y: 325, width: 140, height: 25 },
+        { x: 520, y: 310, width: 140, height: 25 },
+        { x: 520, y: 290, width: 140, height: 25 },
+        { x: 520, y: 275, width: 140, height: 25 },
+        { x: 520, y: 260, width: 140, height: 25 },
 
         //inferior
-        { x: 170, y: 500, width: 100, height: 30 },
-        { x: 150, y: 470, width: 200, height: 30 },
-        { x: 120, y: 440, width: 300, height: 30 },
-        { x: 100, y: 410, width: 320, height: 30 },
-        { x: 80, y: 380, width: 200, height: 30 },
-        { x: 100, y: 350, width: 150, height: 30 },
-        { x: 80, y: 320, width: 100, height: 30 },
-        { x: 70, y: 290, width: 100, height: 30 },
-        { x: 60, y: 260, width: 100, height: 30 },
-        { x: 50, y: 230, width: 100, height: 30 },
+        { x: 170, y: 490, width: 100, height: 20 },
+        { x: 160, y: 470, width: 200, height: 20 },
+        { x: 155, y: 440, width: 220, height: 30 },
+        { x: 130, y: 410, width: 200, height: 30 },
+        { x: 100, y: 380, width: 150, height: 30 },
+        { x: 100, y: 350, width: 120, height: 30 },
+        { x: 90, y: 320, width: 90, height: 30 },
+        { x: 59, y: 290, width: 65, height: 30 },
+        { x: 45, y: 260, width: 30, height: 30 },
     ]
-    /*
-    agua.forEach(region => {
+    
+    /*agua.forEach(region => {
         const rect = this.add.rectangle(region.x, region.y, region.width, region.height,  0x0000ff, 1);
         rect.setOrigin(0, 0); // Asegura que las coordenadas comiencen desde la esquina superior izquierda
     });*/
@@ -540,26 +538,14 @@ this.timerText.setDepth(10);         // Establecer la profundidad para asegurars
         });
     });
     tierra=[
-        {x:100,y:50,width:70,height:230},
-        {x:170,y:70,width:50,height:250},
-        {x:220,y:100,width:50,height:250},
-        {x:270,y:120,width:50,height:250},
-        {x:290,y:140,width:70,height:250},
-        {x:330,y:170,width:70,height:240},
-        {x:400,y:170,width:95,height:240},
+        {x:75,y:100,width:170,height:130},
+        {x:235,y:200,width:170,height:130},
 
-        {x:1000,y:45,width:70,height:230},
-        {x:970,y:60,width:50,height:240},
-        {x:920,y:90,width:50,height:240},
-        {x:870,y:120,width:50,height:240},
-        {x:800,y:150,width:70,height:240},
-        {x:750,y:170,width:70,height:240},
-        {x:685,y:170,width:95,height:260},
+        {x:800,y:175,width:200,height:130},
+        {x:1000,y:65,width:180,height:130},
+        {x:685,y:190,width:95,height:220},
 
-
-
-
-        {x:460,y:400,width:255,height:500},
+        {x:465,y:400,width:245,height:500},
         {x:460,y:170,width:255,height:80},
     ];
     /*tierra.forEach(region => {
@@ -640,11 +626,11 @@ update(time, delta) {
         if (keys.D.isDown) {
             gatoA.setVelocityX(160);  // Mover a la derecha
             gatoA.play('caminar_drchA', true);  // Reproducir animación
-            izqB=false;
+            izqA=false;
         } else if (keys.A.isDown) {
             gatoA.setVelocityX(-160);  // Mover a la izquierda
             gatoA.play('caminar_izqA', true);  // Reproducir animación
-            izqB=true;
+            izqA=true;
         } else {
             gatoA.setVelocityX(0);  // Detener el movimiento horizontal
         }
@@ -1141,14 +1127,14 @@ explotarPezGlobo(pez) {
         // Comprobar si Gato A está dentro del rango de la explosión
         if (coordAActualizada.distance(explosion) <= radioExplosion) {
             puntosA = puntosA - 2;
-            textoA.setText("Puntos: " + puntosA);
+            textoA.setText(" " + puntosA);
             console.log("Gato A recibió daño. Puntos: " + puntosA);
         }
 
         // Comprobar si Gato B está dentro del rango de la explosión
         if (coordBActualizada.distance(explosion) <= radioExplosion) {
             puntosB = puntosB - 2;
-            textoB.setText("Puntos: " + puntosB);
+            textoB.setText(" " + puntosB);
             console.log("Gato B recibió daño. Puntos: " + puntosB);
         }
     }); // Retraso de 7 segundos antes de ejecutar la explosión
@@ -1168,7 +1154,7 @@ updateTimer() {
 }
 
 timeUp() {
-    this.scene.start("ResultScreen"); // Cambiar a la escena ResultScreen
+    this.scene.start("ResultLocalScreen"); // Cambiar a la escena ResultScreen
 }
 
 
