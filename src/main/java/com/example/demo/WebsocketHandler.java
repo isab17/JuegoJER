@@ -180,6 +180,7 @@ public class WebsocketHandler extends TextWebSocketHandler {
             if (game.timerTask != null) game.timerTask.cancel(false);
             games.remove(game.player1.session.getId());
             games.remove(game.player2.session.getId());
+
         }
     }
     

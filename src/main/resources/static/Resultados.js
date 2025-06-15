@@ -71,7 +71,7 @@ class ResultScreen extends Phaser.Scene {
 
         // Caras de gato
         const caraB = this.add.image(100, 350, 'CaraGatoB');
-        caraB.setScale(0.3, 0.);
+        caraB.setScale(0.3, 0.3);
         caraB.setOrigin(0.5);
 
         const textoPuntosB = this.add.text(180, 350, `${puntosB}`, {
