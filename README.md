@@ -220,7 +220,7 @@ Los peces peligrosos (como las pirañas y los peces globo) desaparecen de la pan
 
 ### 5.2. Pantallas e Interfaces
 Pantalla de inicio con un botón de jugar, tutorial, chat, créditos y otro para salir al escritorio. Además, incluye un indicador de estado de conexión.
-![Menú Inicio](https://github.com/user-attachments/assets/a7f46d32-f54e-40fe-a49a-0f28eed24164)
+![Menú Inicio](GDD/Pantallas/menuInicio.png)
 
 Pantalla de chat con una interfaz y un botón de enviar mensajes. Tiene persistencia y permite ver el nombre del usuario que ha escrito.
 ![Chat](https://github.com/user-attachments/assets/bec528c1-6871-4ab9-824f-85e0427edb5b)
@@ -249,14 +249,21 @@ Pantalla de inicio de sesión y de registro (Intercambiables) para jugar online 
 ![Eliminar Usuario](GDD/Pantallas/EliminarUsuario.png)
 
 Pantalla de tutorial con los controles del juego y un botón de regreso a la pantalla de inicio.
-![Tutorial 1](https://github.com/user-attachments/assets/830b0f3e-4f7b-4f57-ad46-1415b995f49a)
-![Tutorial 2](https://github.com/user-attachments/assets/cf8e0bf3-f148-446f-af5c-daaef0367724)
-![Tutorial 3](https://github.com/user-attachments/assets/4037d273-14bd-4689-913c-3a2064407986)
+![Tutorial 1](GDD/Pantallas/Tutorial_1.png)
+![Tutorial 2](GDD/Pantallas/Tutorial_4.png)
+![Tutorial 3](https://github.com/user-attachments/assets/cf8e0bf3-f148-446f-af5c-daaef0367724)
+![Tutorial 4](GDD/Pantallas/Tutorial_3.png)
 
 Pantalla victoria / derrota / empate para el final del juego.
 ![victoria_derrota_2](https://github.com/user-attachments/assets/806e2e58-1661-462c-b0f6-8c94d709178e)
 ![empate](https://github.com/user-attachments/assets/fdc23d37-4a4b-43af-aadf-0a886cafc813)
 ![victoria_derrota_1](https://github.com/user-attachments/assets/8820a084-99d6-4e0e-9a1a-72791ca9f347)
+
+Pantallas del modo online.
+![interfaz_online](GDD/Pantallas/interfazOnline.png)
+![crer_partida_online](GDD/Pantallas/crearPartida.png)
+![unirse_partida_online](GDD/Pantallas/unirsePartida.png)
+![buscar_partida_online](GDD/Pantallas/buscarPartida.png)
 
 ## 6. Música y Sonido
 Música:
