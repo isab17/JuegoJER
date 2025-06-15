@@ -64,7 +64,7 @@ class Partidas extends Phaser.Scene {
 
         // Crear WebSocket solo si no existe ya
         if (!this.registry.has("socket")) {
-        const socket = new WebSocket("ws://localhost:8080/ws");
+        const socket = new WebSocket("ws://" + location.hostname + ":8080/ws");
         this.registry.set("socket", socket);
 
         this.setupWebSocket();
