@@ -282,6 +282,45 @@ Cada jugador podrá jugar en un ordenador distinto del aula mientras estén cone
 - Posiciones de los personajes
 - Acciones de los jugadores (movimiento, recolección de peces)
 - Eventos del juego (inicio de una nueva partida, finalización de la partida, actualización del puntaje)
+### 7.1  Protocolo de Comunicación de Websocket
+Para lograr una experiencia multijugador fluida y en tiempo real, se ha implementado un protocolo de comunicación bidireccional entre cliente y servidor utilizando WebSockets.  
+El protocolo define un conjunto específico de tipos de mensajes que ambos jugadores pueden intercambiar con el servidor. Cada mensaje consta de un identificador de tipo (un carácter) seguido de una carga útil en formato JSON.  
+Estas comunicaciones controlan todas las interacciones importantes del juego: movimientos de los jugadores, aparición de peces, eventos de pausa, final de partida, puntuaciones, entre otros. 
+
+En concreto los mensajes del Cliente al Servidor son: 
+| Tipo | Nombre              | Descripción                                    | Datos JSON enviados                           |
+|------|---------------------|------------------------------------------------|-----------------------------------------------|
+| `p`  | POSICIÓN            | Actualiza la posición y animación del jugador. | String completo (reenviado tal cual).         |
+| `c`  | COLECCIÓN           | Indica que el jugador recogió un pez.          | `{ playerId, animacion, esLanzado (opcional) }` |
+| `f`  | LANZAR              | Lanza un pez globo.                            | `{ x, y, tipo, ... }`                          |
+| `s`  | ESTADO              | Solicita estado completo del juego.            | (vacío)                                        |
+| `u`  | DESCONECTAR         | Señala desconexión de un jugador.              | `{ playerId }`                                 |
+| `r`  | RECONNECT           | Reconexión: pide estado actual.                | (vacío)                                        |
+| `g`  | GENERAR PECES       | Enviar lista de peces generados.               | Lista de objetos pez                           |
+| `x`  | EXPLOSIÓN PEZ GLOBO | Sincroniza explosión futura.                   | `{ x, y, delay (opcional) }`                   |
+| `k`  | KEEP_ALIVE          | Ping de latido para mantener conexión.         | (vacío)                                        |
+| `v`  | VOLVER DE PAUSA     | Jugador vuelve del menú pausa.                 | `playerId` (1 o 2)                             |
+| `z`  | PAUSA               | Ambos jugadores pausarán el juego.             | `playerId`                                     |
+| `m`  | MAPA (Cola pública) | Elegir mapa y entrar a cola pública.           | `{ mapa }`                                     |
+| `l`  | LOBBY PRIVADO       | Unirse o crear partida privada con código.     | `{ mapa, codigo }`                             |
+
+En concreto los mensajes del Servidor al Cliente son: 
+
+| Tipo    | Nombre              | Descripción                                                 | Datos JSON enviados                                                   |
+| ------- | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------|
+| `p`     | POSICIÓN            | Reenvía posición y animación del otro jugador.              | Reenviado directamente                                      |
+| `c`     | COLECCIÓN           | Informa sobre los puntos, parálisis, etc.                   | `{ puntos, paralizar, playerId, ... }`                      |
+| `f`     | LANZAR              | Reenvía acción de lanzar al otro jugador.                   | `{ ... }`                                                   |
+| `s`     | ESTADO              | Estado completo del juego.                                  | `{ player1, player2, tiempo, pecesGenerados }`              |
+| `u`     | DESCONECTAR         | Notifica al rival sobre desconexión.                        | `{ playerId }`                                              |
+| `r`     | RECONNECT           | Estado actual tras reconexión.                              | Igual que `s`                                               |
+| `g`     | GENERAR PECES       | Envía peces generados.                                      | Lista de objetos pez                                        |
+| `x`     | EXPLOSIÓN PEZ GLOBO | Ejecutar explosión sincronizada.                            | `{ x, y, delay }`                                           |
+| `v`     | VOLVER DE PAUSA     | Ambos jugadores reanudan juego.                             | `null`                                                      |
+| `z`     | PAUSA               | Ambos jugadores entran en pausa.                            | `{ pause: true }`                                           |
+| `m`     | MAPA                | Inicia partida (`start=true`) o espera en cola (`start=false`). | `{ start, mapa }`                                       |
+| `o`     | FINALIZAR           | Resultado de la partida.                                    | `{ ganado, perdido, puntosPropios, puntosRival, empate, desconexion? }` |
+| `error` | ERROR               | Mensaje de error.                                           | `{ mensaje }`                                               |
 
 ## 8. Compilación
 Para la compilación del .jar, es necesario poner: java -jar target/purrfectCatch-0.0.1-SNAPSHOT.jar en visual studio estando en el directorio raíz del proyecto. Esto lanza el servidor y a partir de ahí se puede obtener la IP usando la consola de windows, más el puerto q es el 8080 por defecto.
