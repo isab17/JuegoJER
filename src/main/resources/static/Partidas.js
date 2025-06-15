@@ -156,17 +156,23 @@ class Partidas extends Phaser.Scene {
                         console.error("❌ INIT sin ID de jugador válido:", data);
                         return;
                     }
-                
+
                     this.registry.set('jugadorId', data.id);
                     this.registry.set('socket', this.socket);
-                    this.registry.set('initData', data); 
-                
-                    if (this.mapaConfirmado) {
-                        this.scene.start('GameOnline1');
+                    this.registry.set('initData', data);
+
+                    const mapaConfirmado = data.mapa; 
+                    if (mapaConfirmado === 1) {
+                        this.scene.start('GameOnline1', { initData: data });
+                    } else if (mapaConfirmado === 2) {
+                        this.scene.start('GameOnline2', { initData: data });
+                    } else if (mapaConfirmado === 3) {
+                        this.scene.start('GameOnline3', { initData: data });
+                    } else {
+                        console.warn("❓ Mapa no reconocido:", mapaConfirmado);
                     }
                     break;
-                
-            }
+                }
         };
         
         

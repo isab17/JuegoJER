@@ -356,7 +356,7 @@ this.timerText.setDepth(10);         // Establecer la profundidad para asegurars
 
     
     // Crear el gatoB
-    gatoB = this.physics.add.sprite(510, 620, 'gatoB');
+    gatoB = this.physics.add.sprite(670, 620, 'gatoB');
     gatoB.setScale(0.30).setFrame(1);
     gatoB.setSize(280, 57); // Ajusta el tamaño del área de colisión (ancho y alto)
     gatoB.setOffset(0, 453);
@@ -365,7 +365,7 @@ this.timerText.setDepth(10);         // Establecer la profundidad para asegurars
     gatoB.canMove=true;
 
     // Crear el gatoA
-    gatoA = this.physics.add.sprite(670, 620, 'gatoA');
+    gatoA = this.physics.add.sprite(510, 620, 'gatoA');
     gatoA.setScale(0.30).setFrame(1);
     gatoA.setSize(280, 57); // Ajusta el tamaño del área de colisión (ancho y alto)
     gatoA.setOffset(0, 453);

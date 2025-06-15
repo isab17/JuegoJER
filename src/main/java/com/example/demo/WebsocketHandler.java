@@ -117,13 +117,16 @@ public class WebsocketHandler extends TextWebSocketHandler {
         Map<String, Object> initData1 = Map.of(
             "id", 1,
             "p", playersData,
-            "pecesIniciales", game.pecesIniciales
+            "pecesIniciales", game.pecesIniciales,
+            "mapa", game.player1.map
         );
         Map<String, Object> initData2 = Map.of(
             "id", 2,
             "p", playersData,
-            "pecesIniciales", game.pecesIniciales
+            "pecesIniciales", game.pecesIniciales,
+            "mapa", game.player1.map  
         );
+
     
         sendToPlayer(game.player1, "i", initData1);
         sendToPlayer(game.player2, "i", initData2);
@@ -401,9 +404,22 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
             
                         p1.playerId = 1;
                         p2.playerId = 2;
-                        p1.x = 200; p1.y = 620;
-                        p2.x = 1090; p2.y = 160;
-            
+
+                        switch (mapa) {
+                            case 1 -> {
+                                p1.x = 200; p1.y = 620;
+                                p2.x = 1090; p2.y = 160;
+                            }
+                            case 2 -> {
+                                p1.x = 450; p1.y = 620;
+                                p2.x = 800; p2.y = 620;
+                            }
+                            case 3 -> {
+                                p1.x = 510; p1.y = 620;
+                                p2.x = 670; p2.y = 620;
+                            }
+                        }
+
                         Game newGame = new Game(p1, p2);
                         games.put(s1.getId(), newGame);
                         games.put(s2.getId(), newGame);
@@ -469,8 +485,17 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
                     salasPrivadas.put(codigo, sala);
             
                     currentPlayer.playerId = 1;
-                    currentPlayer.x = 200;
-                    currentPlayer.y = 620;
+                    switch (mapaRecibido) {
+                            case 1 -> {
+                                currentPlayer.x = 200; currentPlayer.y = 620;
+                            }
+                            case 2 -> {
+                                currentPlayer.x = 450; currentPlayer.y = 620;
+                            }
+                            case 3 -> {
+                                currentPlayer.x = 510; currentPlayer.y = 620;
+                            }
+                        }
                     currentPlayer.map = mapaRecibido; //  Guardar mapa solo en jugador1
             
                     System.out.println(" Sala creada con código: " + codigo + ", esperando jugador 2...");
@@ -489,16 +514,25 @@ protected void handleTextMessage(WebSocketSession session, TextMessage message) 
                 sala.iniciada = true;
             
                 currentPlayer.playerId = 2;
-                currentPlayer.x = 1090;
-                currentPlayer.y = 160;
-                currentPlayer.map = sala.jugador1.map; // Copiar el mapa del jugador1
+                int mapaSala = sala.jugador1.map; // mapa definitivo
+                switch (mapaSala) {
+                            case 1 -> {
+                                currentPlayer.x = 1090; currentPlayer.y = 160;
+                            }
+                            case 2 -> {
+                                currentPlayer.x = 800; currentPlayer.y = 620;
+                            }
+                            case 3 -> {
+                                currentPlayer.x = 670; currentPlayer.y = 620;
+                            }
+                        }
+                currentPlayer.map = mapaSala; // Copiar el mapa del jugador1
             
                 Game newGame = new Game(sala.jugador1, sala.jugador2);
                 sala.game = newGame;
                 games.put(sala.jugador1.session.getId(), newGame);
                 games.put(sala.jugador2.session.getId(), newGame);
             
-                int mapaSala = sala.jugador1.map; // El mapa elegido
             
                 System.out.println(" Partida iniciada para sala " + codigo + " en mapa " + mapaSala);
             
@@ -585,61 +619,95 @@ public void afterConnectionClosed(WebSocketSession session, CloseStatus status) 
 
 private void generarPecesIniciales(Game game) {
     Random rand = new Random();
-
+    
     List<Map<String, Object>> peces = new ArrayList<>();
     String[] tipos = {"pez", "piraña", "pezGlobo", "angila"};
 
-    // Zonas de agua equivalentes a las usadas en Phaser
-    int[][] zonasAgua = {
-        {370, 650, 503, 50},
-        {370, 0, 503, 50},
-        {370, 210, 250, 270}
-    };
+    int[][] zonasAgua = null;
+
+    // Zonas de agua solo si el mapa es válido
+    if (game.player1.map == 1) {
+        zonasAgua = new int[][] {
+            {370, 650, 503, 50},
+            {370, 0, 503, 50},
+            {370, 210, 250, 270}
+        };
+    } else if (game.player1.map == 2) {
+        zonasAgua = new int[][] {
+        { 510, 250, 250, 270}, // Región 4
+        { 110, 350, 50, 106}, // Región 7
+        { 200, 480, 50, 106},
+        { 1010, 510, 50, 200}
+        };
+    } else if (game.player1.map == 3) {
+        zonasAgua = new int[][] {
+        { 520, 370,  140,  10 },
+        { 520, 355,  140,  25 },
+        { 520, 340,  140,  25 },
+        { 520, 325,  140,  25 },
+        { 520, 310,  140,  25 },
+        { 520, 290,  140,  25 },
+        { 520, 275,  140,  25 },
+        { 520, 260,  140,  25 },
+
+        //inferior
+        { 170, 490, 100,  20 },
+        { 160, 470, 200,  20 },
+        { 155, 440,  220,  30 },
+        { 130, 410,  200,  30 },
+        { 100, 380,  150,  30 },
+        { 100, 350,  120,  30 },
+        { 90, 320,  90,  30 },
+        { 59, 290,  65,  30 },
+        { 45, 260,  30,  30 },
+        };
+    }
 
     int total = 8;
     int zonas = zonasAgua.length;
-    int pecesPorZona = total / zonas;
-    int extras = total % zonas;
 
-    for (int i = 0; i < zonas; i++) {
-        int cantidad = pecesPorZona + (extras-- > 0 ? 1 : 0);
+    // Elegimos 8 zonas aleatorias sin repetir
+    Set<Integer> zonasSeleccionadas = new HashSet<>();
+    while (zonasSeleccionadas.size() < total && zonasSeleccionadas.size() < zonas) {
+        zonasSeleccionadas.add(rand.nextInt(zonas));
+    }
 
+    for (int i : zonasSeleccionadas) {
         int xZona = zonasAgua[i][0];
         int yZona = zonasAgua[i][1];
         int wZona = zonasAgua[i][2];
         int hZona = zonasAgua[i][3];
 
-        for (int j = 0; j < cantidad; j++) {
-            int x = xZona + rand.nextInt(wZona);
-            int y = yZona + rand.nextInt(hZona);
-            String tipo = tipos[rand.nextInt(tipos.length)];
+        int x = xZona + rand.nextInt(wZona);
+        int y = yZona + rand.nextInt(hZona);
+        String tipo = tipos[rand.nextInt(tipos.length)];
 
-            String animSalir = switch (tipo) {
-                case "piraña" -> "salirP";
-                case "pez" -> "salirE";
-                case "pezGlobo" -> "salirPG";
-                case "angila" -> "salirA";
-                default -> "salirE";
-            };
+        String animSalir = switch (tipo) {
+            case "piraña" -> "salirP";
+            case "pez" -> "salirE";
+            case "pezGlobo" -> "salirPG";
+            case "angila" -> "salirA";
+            default -> "salirE";
+        };
 
-            String animIdle = switch (tipo) {
-                case "piraña" -> "idleP";
-                case "pez" -> "idleE";
-                case "pezGlobo" -> "inflarPG";
-                case "angila" -> "idleA";
-                default -> "idleE";
-            };
+        String animIdle = switch (tipo) {
+            case "piraña" -> "idleP";
+            case "pez" -> "idleE";
+            case "pezGlobo" -> "inflarPG";
+            case "angila" -> "idleA";
+            default -> "idleE";
+        };
 
-            Map<String, Object> pez = Map.of(
-                "x", x,
-                "y", y,
-                "tipoPez", tipo,
-                "animSalir", animSalir,
-                "animIdle", animIdle
-            );
+        Map<String, Object> pez = Map.of(
+            "x", x,
+            "y", y,
+            "tipoPez", tipo,
+            "animSalir", animSalir,
+            "animIdle", animIdle
+        );
 
-            peces.add(pez);
-        }
+        peces.add(pez);
+
     }
 
     game.pecesIniciales = peces;

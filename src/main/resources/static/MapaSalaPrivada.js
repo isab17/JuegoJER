@@ -118,7 +118,7 @@ class MapaSalaPrivada extends Phaser.Scene {
                 case 'm':
                     console.log("🗺️ Recibido mensaje 'm':", data);
                     if (data.start) {
-                        this.mapaConfirmado = data.mapa;
+                        console.log("🎮 Ya hay dos jugadores. Esperando INIT para iniciar escena.");
                     } else {
                         console.log("⏳ Esperando otro jugador...");
                     }
@@ -135,16 +135,18 @@ class MapaSalaPrivada extends Phaser.Scene {
                     this.registry.set('socket', this.socket);
                     this.registry.set('initData', data);
 
-                    if (this.mapaConfirmado) {
-                        console.log("🚀 Iniciando escena GameOnline1");
-                        this.scene.start('GameOnline1');
+                    const mapaConfirmado = data.mapa; 
+                    if (mapaConfirmado === 1) {
+                        this.scene.start('GameOnline1', { initData: data });
+                    } else if (mapaConfirmado === 2) {
+                        this.scene.start('GameOnline2', { initData: data });
+                    } else if (mapaConfirmado === 3) {
+                        this.scene.start('GameOnline3', { initData: data });
                     } else {
-                        console.warn("⚠️ INIT recibido pero mapa no confirmado aún.");
+                        console.warn("❓ Mapa no reconocido:", mapaConfirmado);
                     }
                     break;
-
-
-            }
+                }
         };
     
         this.socket.onclose = () => {

@@ -52,7 +52,7 @@ class MapaOnline extends Phaser.Scene {
 
 
         // Ocultar gatos hasta cambiar de escena
-        gatoA = this.physics.add.sprite(200, 620, 'gatoA');
+        gatoA = this.physics.add.sprite(300, 620, 'gatoA');
         gatoA.setVisible(false);
 
         gatoB = this.physics.add.sprite(1090, 160, 'gatoB');
@@ -114,9 +114,7 @@ class MapaOnline extends Phaser.Scene {
             switch (type) {
                 case 'm':
                     console.log("🗺️ Recibido mensaje 'm':", data);
-                    if (data.start) {
-                        this.mapaConfirmado = data.mapa;
-                    } else {
+                    if (!data.start) {
                         console.log("⏳ Esperando otro jugador...");
                     }
                     break;
@@ -132,16 +130,20 @@ class MapaOnline extends Phaser.Scene {
                     this.registry.set('socket', this.socket);
                     this.registry.set('initData', data);
 
-                    if (this.mapaConfirmado) {
-                        console.log("🚀 Iniciando escena GameOnline1");
-                        this.scene.start('GameOnline1');
+                    const mapaConfirmado = data.mapa;
+
+                    if (mapaConfirmado === 1) {
+                        this.scene.start('GameOnline1', { initData: data });
+                    } else if (mapaConfirmado === 2) {
+                        this.scene.start('GameOnline2', { initData: data });
+                    } else if (mapaConfirmado === 3) {
+                        this.scene.start('GameOnline3', { initData: data });
                     } else {
-                        console.warn("⚠️ INIT recibido pero mapa no confirmado aún.");
+                        console.warn("❓ Mapa no reconocido:", mapaConfirmado);
                     }
                     break;
 
-
-            }
+                }
         };
     
         this.socket.onclose = () => {

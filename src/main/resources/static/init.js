@@ -20,7 +20,7 @@ const config = {
     },
     
 
-    scene: [Iniciarsesion, MapaOnline,MapaSalaPrivada, MenuPrincipal, Chat, TutorialScene1, TutorialScene2, TutorialScene3, TutorialScene4, Creditos,Partidas, GameOnline1,Mapa, GameLocal1, GameLocal2,GameLocal3, PauseLocalMenu,PauseMenuOnline, ResultScreen,ResultLocalScreen], 
+    scene: [Iniciarsesion, MapaOnline,MapaSalaPrivada, MenuPrincipal, Chat, TutorialScene1, TutorialScene2, TutorialScene3, TutorialScene4, Creditos,Partidas, GameOnline1,GameOnline2,GameOnline3,Mapa, GameLocal1, GameLocal2,GameLocal3, PauseLocalMenu,PauseMenuOnline, ResultScreen,ResultLocalScreen], 
     
     audio: {
         disableWebAudio: false // Configuración para el audio

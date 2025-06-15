@@ -78,7 +78,7 @@ class TutorialScene1 extends Phaser.Scene {
 
         
         //Textos Menta
-        this.add.text(320, 200, 'Mario', {
+        this.add.text(320, 200, 'Menta', {
             font: 'bold 20px Arial',
             color: '#013220',
             align: 'center'
@@ -109,7 +109,7 @@ class TutorialScene1 extends Phaser.Scene {
         }).setOrigin(0.05);
         
         //Textos Chocolate
-        this.add.text(850, 200, 'Luigi', {
+        this.add.text(850, 200, 'Chocolate', {
             font: 'bold 20px Arial',
             color: '#013220',
             align: 'center'
