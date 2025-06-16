@@ -6,7 +6,7 @@ class GameLocal2 extends Phaser.Scene {
 
 preload() {
     // Aquí es donde normalmente cargarías imágenes, sonidos, etc.
-    this.load.image("escenario", "assets/Escenario2/v5/Final.png");
+    this.load.image("escenario2", "assets/Escenario2/v5/Final.png");
     
     this.load.image("inv_sinDesplegar_normal_gatoA", "assets/inventario/version_chica/salir_chico_1.png");
     this.load.image("inv_sinDesplegar_normal_gatoB", "assets/inventario/version_chica/salir_chico_2.png");
@@ -31,7 +31,7 @@ preload() {
     this.load.image('CaraGatoB', 'assets/inventario/Chocolate.png');
 
     // Cargar la música
-    //this.load.audio("backgroundMusic", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
+    //this.load.audio("background2Music", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
     this.load.audio("sonidoBoton", "assets/musica/SonidoBoton.mp3");
     this.load.audio("sonidoPezBueno", "assets/musica/RecogerPezBueno.mp3");
     this.load.audio("sonidoPezMalo", "assets/musica/RecogerPezMalo.mp3");
@@ -51,8 +51,8 @@ create() {
     this.horaInicio = new Date().toISOString().replace('Z', '');
 
     // Crear la imagen y ajustarla al tamaño del escenario
-    const background = this.add.image(config.width / 2, config.height / 2, 'escenario'); // Centrar la imagen
-    background.setScale(config.width / background.width, config.height / background.height); // Escalar la imagen
+    const background2 = this.add.image(config.width / 2, config.height / 2, 'escenario'); // Centrar la imagen
+    background2.setScale(config.width / background2.width, config.height / background2.height); // Escalar la imagen
 
 
     //Inventario B
@@ -114,10 +114,10 @@ create() {
    const centerY = this.cameras.main.centerY;
 
    // Crear la imagen de fondo para el temporizador en el centro de la pantalla
-   this.timerBackground = this.add.image(centerX, centerY - 100, 'reloj'); // Usamos la imagen 'reloj'
-   this.timerBackground.setOrigin(0.5, 3.3); // Centra la imagen
-   this.timerBackground.setScale(0.35, 0.35); // Centra la imagen
-   this.timerBackground.setDepth(9);         // Establecer la profundidad para asegurarse de que se dibuje encima de otros elementos
+   this.timerbackground2 = this.add.image(centerX, centerY - 100, 'reloj'); // Usamos la imagen 'reloj'
+   this.timerbackground2.setOrigin(0.5, 3.3); // Centra la imagen
+   this.timerbackground2.setScale(0.35, 0.35); // Centra la imagen
+   this.timerbackground2.setDepth(9);         // Establecer la profundidad para asegurarse de que se dibuje encima de otros elementos
 
     //Puntos de los jugadores
     const caraGatoA =this.add.image(450, 50, 'CaraGatoB');

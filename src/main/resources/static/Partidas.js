@@ -62,13 +62,17 @@ class Partidas extends Phaser.Scene {
   
     create() {
 
-        // Crear WebSocket solo si no existe ya
-        if (!this.registry.has("socket")) {
-        const socket = new WebSocket("ws://" + location.hostname + ":8080/ws");
-        this.registry.set("socket", socket);
+        const existingSocket = this.registry.get("socket");
 
-        this.setupWebSocket();
-        
+        // Crear WebSocket solo si no existe o si está cerrado
+        if (!existingSocket || existingSocket.readyState === WebSocket.CLOSED) {
+            const socket = new WebSocket("ws://" + location.hostname + ":8080/ws");
+            this.registry.set("socket", socket);
+            this.socket = socket;
+            this.setupWebSocket();
+        } else {
+            this.socket = existingSocket;
+            this.setupWebSocket();  
         }
 
       
@@ -133,6 +137,9 @@ class Partidas extends Phaser.Scene {
     }
 
     setupWebSocket() {
+
+        if (this.socketHandlersAsignados) return;
+
         this.socket = this.registry.get("socket");
     
         this.socket.onopen = () => {
@@ -160,7 +167,7 @@ class Partidas extends Phaser.Scene {
                     this.registry.set('jugadorId', data.id);
                     this.registry.set('socket', this.socket);
                     this.registry.set('initData', data);
-
+                    
                     const mapaConfirmado = data.mapa; 
                     if (mapaConfirmado === 1) {
                         this.scene.start('GameOnline1', { initData: data });
@@ -180,6 +187,8 @@ class Partidas extends Phaser.Scene {
         this.socket.onclose = () => {
             console.warn("⚠️ Conexión cerrada desde MapaOnline");
         };
+
+        this.socketHandlersAsignados = true;
     }
 
     async checkServerStatus() {

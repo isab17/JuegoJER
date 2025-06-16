@@ -131,7 +131,7 @@ class MapaOnline extends Phaser.Scene {
                     this.registry.set('initData', data);
 
                     const mapaConfirmado = data.mapa;
-
+                    
                     if (mapaConfirmado === 1) {
                         this.scene.start('GameOnline1', { initData: data });
                     } else if (mapaConfirmado === 2) {

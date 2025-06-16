@@ -76,7 +76,7 @@ class GameOnline2 extends Phaser.Scene {
 
 preload() {
     // Aquí es donde normalmente cargarías imágenes, sonidos, etc.
-    this.load.image("escenario", "assets/Escenario2/v5/Final.png");
+    this.load.image("escenario2", "assets/Escenario2/v5/Final.png");
     
     this.load.image("inv_sinDesplegar_normal_gatoA", "assets/inventario/version_chica/salir_chico_1.png");
     this.load.image("inv_sinDesplegar_normal_gatoB", "assets/inventario/version_chica/salir_chico_2.png");
@@ -101,7 +101,7 @@ preload() {
     this.load.image('CaraGatoB', 'assets/inventario/Chocolate.png');
 
     // Cargar la música
-    //this.load.audio("backgroundMusic", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
+    //this.load.audio("background2Music", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
     this.load.audio("sonidoBoton", "assets/musica/SonidoBoton.mp3");
     this.load.audio("sonidoPezBueno", "assets/musica/RecogerPezBueno.mp3");
     this.load.audio("sonidoPezMalo", "assets/musica/RecogerPezMalo.mp3");
@@ -118,8 +118,9 @@ preload() {
 
 create() {
 
-    const background = this.add.image(config.width / 2, config.height / 2, 'escenario'); // Centrar la imagen
-    background.setScale(config.width / background.width, config.height / background.height); // Escalar la imagen
+    const background2 = this.add.image(config.width / 2, config.height / 2, 'escenario2'); // Centrar la imagen
+    background2.setScale(config.width / background2.width, config.height / background2.height); // Escalar la imagen
+    console.log(background2.texture.key);
 
 
     this.peces = this.physics.add.group();
@@ -1228,7 +1229,7 @@ crearUI() {
         strokeThickness: 2
     }).setOrigin(0.5, -0.2).setDepth(10);
 
-    this.timerBackground = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY - 100, 'reloj')
+    this.timerbackground2 = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY - 100, 'reloj')
         .setOrigin(0.5, 3.3)
         .setScale(0.35)
         .setDepth(9);

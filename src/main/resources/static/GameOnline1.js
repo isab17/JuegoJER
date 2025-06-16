@@ -76,7 +76,7 @@ class GameOnline1 extends Phaser.Scene {
 
 preload() {
     // Aquí es donde normalmente cargarías imágenes, sonidos, etc.
-    this.load.image("escenario", "assets/Escenario/v8/Final.png");
+    this.load.image("escenario1", "assets/Escenario/v8/Final.png");
     
     this.load.image("inv_sinDesplegar_normal_gatoA", "assets/inventario/version_chica/salir_chico_1.png");
     this.load.image("inv_sinDesplegar_normal_gatoB", "assets/inventario/version_chica/salir_chico_2.png");
@@ -101,7 +101,7 @@ preload() {
     this.load.image('CaraGatoOnlineB', 'assets/sprites/CaraGatoBOnline.png');
 
     // Cargar la música
-    //this.load.audio("backgroundMusic", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
+    //this.load.audio("background1Music", "assets/musica/los-peces-en-el-mar-loop-c-16730.mp3");
     this.load.audio("sonidoBoton", "assets/musica/SonidoBoton.mp3");
     this.load.audio("sonidoPezBueno", "assets/musica/RecogerPezBueno.mp3");
     this.load.audio("sonidoPezMalo", "assets/musica/RecogerPezMalo.mp3");
@@ -118,8 +118,9 @@ preload() {
 
 create() {
 
-    const background = this.add.image(config.width / 2, config.height / 2, 'escenario'); // Centrar la imagen
-    background.setScale(config.width / background.width, config.height / background.height); // Escalar la imagen
+    const background1 = this.add.image(config.width / 2, config.height / 2, 'escenario1'); // Centrar la imagen
+    background1.setScale(config.width / background1.width, config.height / background1.height); // Escalar la imagen
+    console.log(background1.texture.key);
 
 
     this.peces = this.physics.add.group();
@@ -566,8 +567,6 @@ handleGameOver(data) {
 
     this.scene.start('ResultScreen');
 }
-
-
 
 
 handleMapaSeleccionado(data) {
@@ -1206,7 +1205,7 @@ crearUI() {
         strokeThickness: 2
     }).setOrigin(0.5, -0.2).setDepth(10);
 
-    this.timerBackground = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY - 100, 'reloj')
+    this.timerbackground1 = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY - 100, 'reloj')
         .setOrigin(0.5, 3.3)
         .setScale(0.35)
         .setDepth(9);
@@ -1970,7 +1969,6 @@ aparecerPeces() {
     this.enviarPeces();
 }
 
-
 /**
  * Envía los peces generados al otro jugador mediante WebSocket.
  * Utiliza el tipo de mensaje 'g' para sincronizar peces entre pantallas.
@@ -1997,7 +1995,6 @@ enviarPeces() {
     this.socket.send(MSG_TYPES.FISH_SPAWN + JSON.stringify(data));
     console.log("📤 Enviando peces generados al otro jugador:", data);
 }
-
 
 /**
  * Notifica la recogida del pez al servidor, que validará el tipo y aplicará la puntuación.
@@ -2149,79 +2146,6 @@ explotarPezGlobo(pez) {
             this.socket.send(JSON.stringify(estado));
         }
     });
-}
-
-
-/**
- * Determina el jugador ganador y envía el estado final por WebSocket.
- */
-infoGanador() {
-    const jugadorA = this.jugadores.gatoA;
-    const jugadorB = this.jugadores.gatoB;
-
-    if (!jugadorA || !jugadorB) {
-        console.error("❌ Error: jugadorA o jugadorB no están definidos.");
-        return;
-    }
-
-    // Comparar puntuaciones y establecer estados
-    if (jugadorA.puntos > jugadorB.puntos) {
-        jugadorA.ganado = true;
-        jugadorA.perdido = false;
-        jugadorB.ganado = false;
-        jugadorB.perdido = true;
-    } else if (jugadorB.puntos > jugadorA.puntos) {
-        jugadorA.ganado = false;
-        jugadorA.perdido = true;
-        jugadorB.ganado = true;
-        jugadorB.perdido = false;
-    } else {
-        jugadorA.ganado = true;
-        jugadorA.perdido = false;
-        jugadorB.ganado = true;
-        jugadorB.perdido = false;
-    }
-
-    // Enviar estado final del jugador local (host o no)
-    const jugadorKey = this.isHost ? 'gatoA' : 'gatoB';
-    const jugador = this.jugadores[jugadorKey];
-
-    const data = {
-        type: "state",
-        playerId: jugador.id,
-        ready: jugador.ready || false,
-        x: jugador.sprite?.x || jugador.x,
-        y: jugador.sprite?.y || jugador.y,
-        pescar: jugador.pescar || false,
-        animacionGato: jugador.animacion || null,
-        Time: this.timeLeft || 0,
-        xPez: this.pezX,
-        yPez: this.pezY,
-        pezTipo: this.tipoPez,
-        animacionPez: this.pezAnims,
-        pezGloboExplotando: this.explosionPezGlobo,
-        pezGloboCapturado: jugador.pezGloboCapturado || false,
-        pezGloboLanzado: jugador.lanzarPezGlobo || false,
-        jugadorParalizado: jugador.paralizado || false,
-        jugadorExplosion: jugador.explosion || false,
-        inventario: jugador.inventario || 0,
-        inventarioAbierto: jugador.inventarioAbierto || false,
-        puntos: jugador.puntos || 0,
-        hasCollidedFish: jugador.colision || false,
-        ganado: jugador.ganado,
-        perdido: jugador.perdido,
-        pause: jugador.pause || false,
-        desconectado: jugador.desconectado || false,
-        map: this.isHost ? mapa1 : mapa2,
-        pecesGenerados: this.pecesGenerados || []
-    };
-
-    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-        this.socket.send(JSON.stringify(data));
-        console.log("📤 Estado final enviado:", data);
-    } else {
-        console.warn("⚠️ WebSocket no conectado. No se pudo enviar estado final.");
-    }
 }
 
 } 

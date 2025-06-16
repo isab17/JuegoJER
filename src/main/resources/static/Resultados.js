@@ -95,7 +95,7 @@ class ResultScreen extends Phaser.Scene {
         });
 
         if (finPorDesconexion) {
-            this.add.text(config.width / 2, 40, "Fin de la partida por desconexión del jugador", {
+            this.add.text(config.width / 2, 100, "Fin de la partida por desconexión del jugador", {
                 font: "28px Arial Black",
                 color: "#ffffff",
                 stroke: "#000000",
