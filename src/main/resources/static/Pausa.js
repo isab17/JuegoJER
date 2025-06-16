@@ -33,6 +33,15 @@ class PauseMenuOnline extends Phaser.Scene {
             align: 'center',
         }).setOrigin(0.03);
 
+        this.textoEsperando = this.add.text(600, 700, 'Esperando al otro jugador...', {
+            font: "28px Arial Black",
+                color: "#ffffff",
+                stroke: "#000000",
+                strokeThickness: 4,
+                align: "center"
+        }).setOrigin(0.5).setVisible(false); // oculto al inicio
+
+
         // Crear barra de volumen
         const barraVolumen = this.add.image(600, 450, 'Barra_volumen').setScale(0.8);
         const deslizador = this.add.image(700, 480, 'Control_deslizador').setInteractive();
@@ -72,15 +81,17 @@ class PauseMenuOnline extends Phaser.Scene {
         botonVolver.on('pointerup', () => {
             botonVolver.setTexture('Boton_volver_normal');
             sonidoBoton.play();
-        
+
             const jugadorId = this.registry.get('jugadorId');
             if (jugadorId) {
                 this.registry.set('yoHeDadoAVolver', true);
-                this.registry.get('socket').send('v' + jugadorId); // ← ENVÍA SOLO EL ID
-            }
+                this.registry.get('socket').send('v' + jugadorId);
 
+                // Mostrar mensaje de espera
+                this.textoEsperando.setVisible(true);
+                botonVolver.disableInteractive(); // evitar repeticiones
+            }
         });
-        
-        
+
     }
 }

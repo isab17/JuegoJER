@@ -890,8 +890,8 @@ resumeGame() {
         this.registry.set('yoHeDadoAVolver', false); // Limpiamos flag
         this.pause = false;
 
-        if (this.scene.isActive('PauseMenu')) {
-            this.scene.stop('PauseMenu'); // Cerrar menú
+        if (this.scene.isActive('PauseMenuOnline')) {
+            this.scene.stop('PauseMenuOnline'); // Cerrar menú
         }
 
         this.scene.resume(); // Reanudar juego
@@ -1064,7 +1064,7 @@ registrarEventos() {
     
         this.PausarJuego?.();
     
-        this.scene.launch('PauseMenu', { escenaPrevia: this.scene.key });
+        this.scene.launch('PauseMenuOnline', { escenaPrevia: this.scene.key });
         if (this.scene.isActive(this.escenaPrevia)) {
             this.scene.pause(this.escenaPrevia);
             console.log("⏸️ Pausa activada");
@@ -1264,7 +1264,7 @@ crearUI() {
     botonPausa.on('pointerup', () => {
         botonPausa.setTexture('Boton_pausa_normal');
         this.PausarJuego();
-        this.scene.launch('PauseMenu', { escenaPrevia: this.scene.key });
+        this.scene.launch('PauseMenuOnline', { escenaPrevia: this.scene.key });
         if (this.scene.isActive(this.escenaPrevia)) {
             this.scene.pause(this.escenaPrevia);
             console.log("⏸️ Pausa activada");
@@ -1532,7 +1532,7 @@ PausarJuego(reanudar = false) {
 
     // Si se está pausando, mostrar menú
     if (!reanudar && this.pause) {
-        this.scene.launch('PauseMenu', { escenaPrevia: this.scene.key });
+        this.scene.launch('PauseMenuOnline', { escenaPrevia: this.scene.key });
         if (this.scene.isActive(this.escenaPrevia)) {
             this.scene.pause(this.escenaPrevia);
             console.log("⏸️ Pausa activada");
