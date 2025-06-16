@@ -42,6 +42,7 @@ class MapaOnline extends Phaser.Scene {
         this.setupWebSocket();
 
         this.botonesMapa = [];
+        this.timerRefreshButtons = null;
 
         const fondo = this.add.image(this.scale.width / 2, this.scale.height / 2, "Mapa_fondo");
         fondo.setScale(
@@ -172,27 +173,26 @@ class MapaOnline extends Phaser.Scene {
         });
     
         this.botonesMapa.push(btn); // ← Aquí lo guardas
-    
-        // Ahora también guarda el evento que refresca botones:
-        if (!this.timerRefreshButtons) {
-            this.timerRefreshButtons = this.time.addEvent({
-                delay: 100,
-                loop: true,
-                callback: () => {
-                    if (this.socketListo) {
-                        this.botonesMapa.forEach(obj => {
-                            if (obj.input && obj.texture && obj.texture.key.includes("_normal")) {
-                                obj.setInteractive();
-                            }
-                        });
-                    }
-                }
-            });
+        if (this.timerRefreshButtons) {
+        this.timerRefreshButtons.remove(false);
         }
+
+        this.timerRefreshButtons = this.time.addEvent({
+            delay: 100,
+            loop: true,
+            callback: () => {
+                if (this.socketListo) {
+                    this.botonesMapa.forEach(obj => {
+                        if (obj.input && obj.texture && obj.texture.key.includes("_normal")) {
+                            obj.setInteractive();
+                        }
+                    });
+                }
+            }
+        });
     }
     
     
-
     seleccionarMapa(id) {
         const socket = this.registry.get("socket");
     
@@ -236,7 +236,7 @@ class MapaOnline extends Phaser.Scene {
         } catch (error) {
             console.error('Error al verificar el estado del servidor:', error);
             this.botonServer.setTexture("botonDesconectado");
-            this.scene.start('MenuPrincipal');
+            this.scene.start('partida');
         }
     }
 }
