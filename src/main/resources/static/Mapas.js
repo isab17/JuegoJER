@@ -16,9 +16,9 @@ class Mapa extends Phaser.Scene {
          this.load.image('Descampado_seleccionado', 'assets/Mapas/mapas_botones/Descampado/seleccion.png');
          this.load.image('Descampado_presionado', 'assets/Mapas/mapas_botones/Descampado/pulsado.png');
 
-         this.load.image('JuegoMesa_normal', 'assets/Mapas/mapas_botones/Juego_de_mesa/normal.png');
-         this.load.image('JuegoMesa_seleccionado', 'assets/Mapas/mapas_botones/Juego_de_mesa/seleccionado.png');
-         this.load.image('JuegoMesa_presionado', 'assets/Mapas/mapas_botones/Juego_de_mesa/pulsado.png');
+         this.load.image("JuegoMesa_normal", "assets/Mapas/mapas_botones/juego_de_mesa/normal.png");
+         this.load.image("JuegoMesa_seleccionado", "assets/Mapas/mapas_botones/juego_de_mesa/seleccionado.png");
+         this.load.image("JuegoMesa_presionado", "assets/Mapas/mapas_botones/juego_de_mesa/pulsado.png");
 
          this.load.image('Vortice_normal', 'assets/Mapas/mapas_botones/Vortice/Vortice_normal.png');
          this.load.image('Vortice_seleccionado', 'assets/Mapas/mapas_botones/Vortice/Vortice_seleccionado.png');
