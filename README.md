@@ -335,3 +335,8 @@ Para la compilación del .jar, es necesario poner: java -jar target/purrfectCatc
 Las clases de Purrfect Catch se pueden dividir en 4 grupos, clases @Service, @Controller, Modelo y de iniciación de aplicación, en este diagrama se incluye la relación entre ellas:
 
 ![Clases](https://github.com/user-attachments/assets/813b508e-df52-443f-bc19-d782c9aeb06d)
+
+## 9. Enlaces del juego
+Juego subido a las siguientes plataformas:
+- Newgrounds: https://www.newgrounds.com/portal/view/984865
+- Itch.io: https://nachogonvi.itch.io/purrfectcatch
